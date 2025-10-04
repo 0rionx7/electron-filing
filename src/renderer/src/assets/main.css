@@ -3,10 +3,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  height: 100%;
+}
+
 body {
+  @apply bg-amber-500;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
   overflow: hidden;
   background-image: url('./wavy-lines.svg');
   background-size: cover;

@@ -1,37 +1,36 @@
 import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
 import { Input } from '@renderer/components/ui/input'
 import { Button } from '@renderer/components/ui/button'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@renderer/components/ui/card'
+import { Label } from '@renderer/components/ui/label'
 
 function App(): React.JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-
   return (
     <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <Input placeholder="Type here" className="input" />
-      <Button className="button">Button</Button>
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React!!</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
-        </div>
-      </div>
-      <Versions></Versions>
+      <Card>
+        <CardHeader>
+          <CardTitle>Card Title</CardTitle>
+          <CardDescription>Card Description</CardDescription>
+          <CardAction>Card Action</CardAction>
+        </CardHeader>
+        <CardContent>
+          <p>Card Content</p>
+          <Label htmlFor="input">Label</Label>
+          <Input id="input" placeholder="Type here" className="input" />
+          <Button className="button">Button</Button>
+        </CardContent>
+        <CardFooter>
+          <p>Card Footer</p>
+        </CardFooter>
+      </Card>
     </>
   )
 }
