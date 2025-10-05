@@ -1,4 +1,4 @@
-import Versions from './components/Versions'
+import { useState } from 'react'
 import { Input } from '@renderer/components/ui/input'
 import { Button } from '@renderer/components/ui/button'
 import {
@@ -13,22 +13,31 @@ import {
 import { Label } from '@renderer/components/ui/label'
 
 function App(): React.JSX.Element {
+  const [msg, setMsg] = useState('')
+
+  const handleSelect = async (): Promise<void> => {
+    try {
+      await window.api.openFolder()
+      setMsg('Folder selection received.')
+    } catch (error) {
+      setMsg('Folder selection failed.Please try again.')
+    }
+  }
+
   return (
     <>
-      <Card>
+      <Card className="bg-stone-400 space-y-2.5 w-xl shadow-black shadow-md">
         <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-          <CardAction>Card Action</CardAction>
+          <CardTitle>Folder selection utility</CardTitle>
+          <CardDescription>Please select a folder</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-          <Label htmlFor="input">Label</Label>
-          <Input id="input" placeholder="Type here" className="input" />
-          <Button className="button">Button</Button>
+        <CardContent className="space-y-2.5">
+          <Button className="button" onClick={handleSelect}>
+            Select
+          </Button>
         </CardContent>
         <CardFooter>
-          <p>Card Footer</p>
+          <p>{msg}</p>
         </CardFooter>
       </Card>
     </>
