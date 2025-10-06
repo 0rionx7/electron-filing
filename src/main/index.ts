@@ -2,9 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { dialog } from 'electron'
-import path from 'path'
-import { promises as fs } from 'fs'
+import { handleFolderSelection } from './utils'
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,31 +50,11 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  async function handleFolderOpen(): Promise<void> {
-    const { filePaths } = await dialog.showOpenDialog({
-      properties: ['openDirectory']
-    })
-    console.log(filePaths[0])
-    listDirContents(filePaths[0])
-  }
-  async function listDirContents(dirPath): Promise<void> {
-    const entries = await fs.readdir(dirPath, { withFileTypes: true })
-
-    const results = entries.map((entry) => {
-      const fullPath = path.join(dirPath, entry.name)
-      return {
-        name: entry.name,
-        path: fullPath,
-        isFile: entry.isFile(),
-        isDirectory: entry.isDirectory()
-      }
-    })
-
-    console.log(results)
-  }
-
-  ipcMain.handle('dialog:openFolder', handleFolderOpen)
   createWindow()
+  ipcMain.handle('dialog:openFolder', async () => {
+    const fileEntities = await handleFolderSelection()
+    return fileEntities
+  })
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
