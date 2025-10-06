@@ -1,5 +1,7 @@
 import { use } from 'react'
 
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
+
 import { FilesContext } from '@renderer/components/FilesSelection'
 import { Button } from '@renderer/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
@@ -12,47 +14,56 @@ import {
   SelectValue
 } from '@renderer/components/ui/select'
 
+type Form = {
+  fileList: string
+}
+
 export function ChooseFiles(): React.JSX.Element | null {
   const { fileEntities } = use(FilesContext)
 
+  const { handleSubmit, control } = useForm<Form>({
+    defaultValues: { fileList: '' }
+  })
+
+  const onSubmit: SubmitHandler<Form> = (data) => {
+    console.log(data)
+  }
+
   if (!fileEntities.length) return null
 
-  const handleSelect = (): void => {}
-
   return (
-    <>
-      <Card className="bg-stone-400 space-y-2.5 w-xl shadow-black shadow-md">
-        <CardHeader>
-          <CardTitle>Please select your files</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2.5">
-          <form>
-            <FieldGroup>
-              <div className="grid grid-cols-3 gap-4">
-                <Field>
-                  <FieldLabel htmlFor="checkout-exp-month-ts6">File List</FieldLabel>
-                  <Select defaultValue="">
-                    <SelectTrigger id="checkout-exp-month-ts6">
-                      <SelectValue placeholder="MM" />
+    <Card className="bg-stone-400 space-y-2.5 w-xl shadow-black shadow-md">
+      <CardHeader>
+        <CardTitle>Please select your files</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2.5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5">
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="file-list">File List</FieldLabel>
+              <Controller
+                name="fileList"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id="file-list">
+                      <SelectValue placeholder="Choose a file" />
                     </SelectTrigger>
                     <SelectContent>
-                      {fileEntities.map(({ fileName }) => (
-                        <SelectItem key={fileName} value={fileName}>
+                      {fileEntities.map(({ fileName, path }) => (
+                        <SelectItem key={fileName + path} value={fileName}>
                           {fileName}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                </Field>
-              </div>
-            </FieldGroup>
-          </form>
-          <Button className="button" onClick={handleSelect}>
-            Select
-          </Button>
-        </CardContent>
-      </Card>
-      <div className="w-full max-w-md"></div>
-    </>
+                )}
+              />
+            </Field>
+          </FieldGroup>
+          <Button type="submit">Select</Button>
+        </form>
+      </CardContent>
+    </Card>
   )
 }
