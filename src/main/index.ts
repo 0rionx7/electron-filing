@@ -55,6 +55,9 @@ app.whenReady().then(() => {
     const fileEntities = await handleFolderSelection()
     return fileEntities
   })
+  ipcMain.handle('send-files', (_event, files) => {
+    console.log(files)
+  })
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

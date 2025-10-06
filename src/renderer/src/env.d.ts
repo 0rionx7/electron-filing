@@ -8,6 +8,7 @@ declare global {
   interface Window {
     api: {
       openFolder: () => Promise<FileEntity[]>
+      choosenFiles: (data) => Promise<never>
       // add any other methods you expose from preload
     }
   }
