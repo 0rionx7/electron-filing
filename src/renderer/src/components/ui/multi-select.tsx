@@ -9,10 +9,9 @@ import {
 } from '@renderer/components/ui/command'
 import { Button } from '@renderer/components/ui/button'
 import { Checkbox } from '@renderer/components/ui/checkbox'
-import { Badge } from '@renderer/components/ui/badge'
 import { X } from 'lucide-react'
 import { cn } from '@renderer/lib/utils'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export type MultiOption = { value: string; label: string; disabled?: boolean }
 
@@ -48,6 +47,10 @@ export function MultiSelect({
     onChange([])
   }
 
+  useEffect(() => {
+    return () => onChange([])
+  }, [])
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -55,9 +58,8 @@ export function MultiSelect({
           type="button"
           variant="outline"
           role="combobox"
-          aria-expanded={open}
           className={cn(
-            'w-full justify-between',
+            'w-full justify-between align-top',
             className,
             selected.length === 0 && 'text-muted-foreground'
           )}
@@ -70,7 +72,12 @@ export function MultiSelect({
             <span>{placeholder}</span>
           )}
           {selected.length > 0 && (
-            <X className="ml-2 size-4 opacity-60 hover:opacity-100" onClick={clear} />
+            <span
+              className="ml-2 size-4 opacity-60 hover:opacity-100 flex items-center justify-center"
+              onClick={clear}
+            >
+              X
+            </span>
           )}
         </Button>
       </PopoverTrigger>
