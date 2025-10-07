@@ -40,7 +40,6 @@ const initialValues: RegisterDataType = {
     dateOfBirth: '',
     country: 'Greece'
   },
-
   rootDirectory: '',
   entities: { entity1: [], entity2: [] },
   fileList: []
@@ -69,7 +68,11 @@ export const registerSlice = createSlice({
     ) => {
       state.data.secondStep = { ...state.data.secondStep, ...action.payload }
     },
-    setrootDirectory: (state, action: PayloadAction<string>) => {
+    setRootDirectory: (state, action: PayloadAction<string>) => {
+      if (state.data.rootDirectory !== action.payload) {
+        state.data.entities.entity1 = []
+        state.data.entities.entity2 = []
+      }
       state.data.rootDirectory = action.payload
     },
     setFileList: (state, action: PayloadAction<FileEntity[]>) => {
@@ -83,6 +86,9 @@ export const registerSlice = createSlice({
     },
     setStep: (state, action: PayloadAction<number>) => {
       state.step = action.payload
+    },
+    resetEntity: (state, action: PayloadAction<string>) => {
+      state.data.entities[action.payload] = []
     },
     reset: () => initialState
   },
@@ -102,9 +108,10 @@ export const {
   updateFirstStepData,
   updateSecondStepData,
   setStep,
-  setrootDirectory,
+  setRootDirectory,
   setFileList,
   toggleEntity,
+  resetEntity,
   reset
 } = registerSlice.actions
 export const {

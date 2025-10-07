@@ -12,7 +12,7 @@ import { Checkbox } from '@renderer/components/ui/checkbox'
 import { cn } from '@renderer/lib/utils'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { selectEntities, toggleEntity } from '@renderer/slice/slice'
+import { resetEntity, selectEntities, toggleEntity } from '@renderer/slice/slice'
 
 export type MultiOption = { value: string; label: string; disabled?: boolean }
 
@@ -57,11 +57,12 @@ export function MultiSelect({
     dispatch(toggleEntity({ name, value: v }))
   }
 
-  const clear = (e: React.MouseEvent) => {
+  const clear = (e: React.MouseEvent, name: string) => {
     e.stopPropagation()
     onChange([])
+    dispatch(resetEntity(name))
   }
-  const selected = () => options.filter((o) => value.includes(o.value))
+  const selected = availableEntities.filter((e) => value.includes(e.value))
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -86,7 +87,7 @@ export function MultiSelect({
           {selected.length > 0 && (
             <span
               className="ml-2 size-4 opacity-60 hover:opacity-100 flex items-center justify-center"
-              onClick={clear}
+              onClick={(e) => clear(e, name)}
             >
               X
             </span>

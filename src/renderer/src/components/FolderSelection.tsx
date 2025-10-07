@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Button } from '@renderer/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import { selectRootDirectory, setFileList, setrootDirectory, setStep } from '@renderer/slice/slice'
+import { selectRootDirectory, setFileList, setRootDirectory, setStep } from '@renderer/slice/slice'
 import { toast } from 'sonner'
 
 const FolderSelection = (): React.JSX.Element | null => {
@@ -11,8 +11,7 @@ const FolderSelection = (): React.JSX.Element | null => {
   const handleSelect = async (): Promise<void> => {
     try {
       const response = await window.api.openFolder()
-      console.log(response)
-      dispatch(setrootDirectory(response.rootDirectory))
+      dispatch(setRootDirectory(response.rootDirectory))
       dispatch(setFileList(response.fileEntities))
       dispatch(setStep(4))
     } catch {

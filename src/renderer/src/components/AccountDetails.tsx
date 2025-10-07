@@ -36,7 +36,7 @@ export default function AccountDetails({ title }: TitleProps): React.JSX.Element
   }
 
   return (
-    <Card className="w-full bg-stone-300">
+    <Card className="w-md bg-stone-300">
       <CardHeader>
         <CardTitle className="text-gray-600">{title}</CardTitle>
       </CardHeader>

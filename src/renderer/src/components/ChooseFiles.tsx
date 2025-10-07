@@ -38,7 +38,7 @@ export function ChooseFiles(): React.JSX.Element | null {
   }
 
   return (
-    <Card className="w-full bg-stone-300">
+    <Card className="w-md bg-stone-300">
       <CardHeader>
         <CardTitle className="text-gray-600">Select your files</CardTitle>
       </CardHeader>
@@ -79,7 +79,7 @@ export function ChooseFiles(): React.JSX.Element | null {
           >
             Back
           </Button>
-          <Button type="submit">Select</Button>
+          {(entity1.length > 0 || entity2.length > 0) && <Button type="submit">Select</Button>}
         </form>
       </CardContent>
     </Card>

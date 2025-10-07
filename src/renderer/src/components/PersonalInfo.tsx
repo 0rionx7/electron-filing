@@ -1,10 +1,10 @@
+import { useEffect } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Input } from '@renderer/components/ui/input'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
 import { Country, PersonalInfoSchema, PersonalInfoType } from '@renderer/lib/schema'
 import {
   selectFirstStepData,
@@ -21,11 +21,6 @@ import {
   FormLabel,
   FormMessage
 } from '@renderer/components/ui/form'
-import { useEffect } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover'
-import { cn } from '@renderer/lib/utils'
-import { Calendar1Icon } from 'lucide-react'
-import { Calendar } from '@renderer/components/ui/calendar'
 import {
   Select,
   SelectContent,
@@ -33,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@renderer/components/ui/select'
+import DatePicker from '@renderer/components/DatePicker'
 
 export type TitleProps = { title: string }
 const countries: Country[] = ['Greece', 'Cyprus', 'Italy', 'Spain']
@@ -103,37 +99,7 @@ export default function PersonalInfo({ title }: TitleProps): React.JSX.Element {
             <FormField
               control={form.control}
               name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Date of birth</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-[240px] pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                          <Calendar1Icon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
-                        captionLayout="dropdown"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => <DatePicker field={field} />}
             />
             <FormField
               control={form.control}
