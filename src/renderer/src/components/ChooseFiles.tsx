@@ -28,11 +28,13 @@ export function ChooseFiles(): React.JSX.Element | null {
 
   const options: MultiOption[] = fileList
 
-  const onSubmit: SubmitHandler<FilesSelection> = (data) => {
+  const onSubmit: SubmitHandler<FilesSelection> = async () => {
     const ent1 = entity1.map((e) => ({ label: e.split('\\').pop(), value: e }))
     const ent2 = entity2.map((e) => ({ label: e.split('\\').pop(), value: e }))
     const fileMapping = { rootDirectory, entity1: ent1, entity2: ent2 }
     console.log(fileMapping)
+    await window.api.choosenFiles(fileMapping)
+    dispatch(setStep(5))
   }
 
   return (

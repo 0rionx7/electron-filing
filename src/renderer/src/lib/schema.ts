@@ -37,20 +37,20 @@ export const PersonalInfoSchema = (username: string) =>
           path: ['lastName']
         })
       }
-      // const { dateOfBirth } = val
-      // const today = new Date()
-      // const age = today.getFullYear() - dateOfBirth.getFullYear()
-      // const hasBirthdayPassed =
-      //   today.getMonth() > dateOfBirth.getMonth() ||
-      //   (today.getMonth() === dateOfBirth.getMonth() && today.getDate() >= dateOfBirth.getDate())
-      // const actualAge = hasBirthdayPassed ? age : age - 1
-      // if (actualAge < 18) {
-      //   ctx.addIssue({
-      //     code: 'custom',
-      //     message: 'You must be over 18',
-      //     path: ['dateOfBirth']
-      //   })
-      // }
+      const { dateOfBirth } = val
+      const today = new Date()
+      const age = today.getFullYear() - dateOfBirth.getFullYear()
+      const hasBirthdayPassed =
+        today.getMonth() > dateOfBirth.getMonth() ||
+        (today.getMonth() === dateOfBirth.getMonth() && today.getDate() >= dateOfBirth.getDate())
+      const actualAge = hasBirthdayPassed ? age : age - 1
+      if (actualAge < 18) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'You must be over 18',
+          path: ['dateOfBirth']
+        })
+      }
     })
 
 export type AccountDetailsType = z.infer<typeof AccountDetailsSchema>

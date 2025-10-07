@@ -83,7 +83,8 @@ export const registerSlice = createSlice({
     },
     setStep: (state, action: PayloadAction<number>) => {
       state.step = action.payload
-    }
+    },
+    reset: () => initialState
   },
   selectors: {
     selectFirstStepData: (formState) => formState.data.firstStep,
@@ -103,7 +104,8 @@ export const {
   setStep,
   setrootDirectory,
   setFileList,
-  toggleEntity
+  toggleEntity,
+  reset
 } = registerSlice.actions
 export const {
   selectFirstStepData,
