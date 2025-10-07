@@ -1,57 +1,74 @@
-import { use } from 'react'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 
 import { MultiSelect, type MultiOption } from '@renderer/components/ui/multi-select'
 import { Button } from '@renderer/components/ui/button'
 
-import { FilesContext } from '@renderer/components/FilesSelection'
-import AppCard from '@renderer/components/AppCard'
+import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
+import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
+import { selectFileList, setStep } from '@renderer/slice/slice'
 
 type Form = {
-  fileList: string[]
+  entity1: string[]
+  entity2: string[]
 }
 
 export function ChooseFiles(): React.JSX.Element | null {
-  const { fileEntities, setFileEndities } = use(FilesContext)
-  const { handleSubmit, control } = useForm<Form>({ defaultValues: { fileList: [] } })
+  const { handleSubmit, control } = useForm<Form>({ defaultValues: { entity1: [], entity2: [] } })
+  const fileList = useAppSelector(selectFileList)
+  const dispatch = useAppDispatch()
 
-  if (!fileEntities.length) return null
-
-  const options: MultiOption[] = fileEntities.map((f) => ({
-    label: f.fileName,
-    value: f.path
-  }))
+  const options: MultiOption[] = fileList
 
   const onSubmit: SubmitHandler<Form> = (data) => {
+    console.log(fileList)
     console.log(data)
-    setFileEndities([])
-    window.api.choosenFiles(data.fileList)
-  }
-
-  const handleBackClick = (): void => {
-    setFileEndities([])
   }
 
   return (
-    <AppCard title="Select your files" description="">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5">
-        <Controller
-          name="fileList"
-          control={control}
-          render={({ field }) => (
-            <MultiSelect
-              value={field.value}
-              onChange={field.onChange}
-              options={options}
-              placeholder="Choose files"
-            />
-          )}
-        />
-        <Button type="button" onClick={handleBackClick} className="mr-4">
-          Back
-        </Button>
-        <Button type="submit">Select</Button>
-      </form>
-    </AppCard>
+    <Card className="w-full bg-stone-300">
+      <CardHeader>
+        <CardTitle className="text-gray-600">Select your files</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5">
+          <Controller
+            name="entity1"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                name="entity1"
+                value={field.value}
+                onChange={field.onChange}
+                options={options}
+                placeholder="Choose files"
+              />
+            )}
+          />
+          <Controller
+            name="entity2"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                name="entity2"
+                value={field.value}
+                onChange={field.onChange}
+                options={options}
+                placeholder="Choose files"
+              />
+            )}
+          />
+          <Button
+            type="button"
+            onClick={() => {
+              dispatch(setStep(3))
+            }}
+            className="mr-4"
+          >
+            Back
+          </Button>
+          <Button type="submit">Select</Button>
+        </form>
+      </CardContent>
+    </Card>
   )
 }

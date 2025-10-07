@@ -1,9 +1,5 @@
 import { createContext, useState } from 'react'
 
-export type FileEntity = {
-  fileName: string
-  path: string
-}
 type FilesCtx = {
   fileEntities: FileEntity[]
   setFileEndities: (v: FileEntity[]) => void

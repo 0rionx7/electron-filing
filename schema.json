@@ -1,0 +1,14 @@
+{
+  "fileMapping": {
+    "rootDirectory": "hello_world",
+    "entity1": [
+      { "label": "hello.pdf", "value": "c:\\users\\files\\hello.pdf" },
+      { "label": "hello.pdf", "value": "c:\\users\\files\\hello.pdf" }
+    ],
+    "entity2": [
+      { "label": "hello.pdf", "value": "c:\\users\\files\\hello.pdf" },
+      { "label": "hello.pdf", "value": "c:\\users\\files\\hello.pdf" },
+      { "label": "hello.pdf", "value": "c:\\users\\files\\hello.pdf" }
+    ]
+  }
+}

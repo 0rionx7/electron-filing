@@ -9,13 +9,15 @@ import {
 } from '@renderer/components/ui/command'
 import { Button } from '@renderer/components/ui/button'
 import { Checkbox } from '@renderer/components/ui/checkbox'
-import { X } from 'lucide-react'
 import { cn } from '@renderer/lib/utils'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
+import { selectEntities, toggleEntity } from '@renderer/slice/slice'
 
 export type MultiOption = { value: string; label: string; disabled?: boolean }
 
 type MultiSelectProps = {
+  name: 'entity1' | 'entity2'
   value: string[]
   onChange: (next: string[]) => void
   options: MultiOption[]
@@ -25,6 +27,7 @@ type MultiSelectProps = {
 }
 
 export function MultiSelect({
+  name,
   value,
   onChange,
   options,
@@ -34,22 +37,31 @@ export function MultiSelect({
 }: MultiSelectProps) {
   const [open, setOpen] = useState(false)
 
-  const selected = useMemo(() => options.filter((o) => value.includes(o.value)), [options, value])
+  const entities = useAppSelector(selectEntities)
+  const dispatch = useAppDispatch()
+
+  let selectedEntities: any[] = []
+
+  for (const entityKey in entities) {
+    if (entityKey !== name) selectedEntities = [...selectedEntities, ...entities[entityKey]]
+  }
+
+  const availableEntities = options.filter(({ value }) => {
+    return !selectedEntities.includes(value)
+  })
 
   const toggle = (v: string) => {
     const set = new Set(value)
     set.has(v) ? set.delete(v) : set.add(v)
     onChange([...set])
+    dispatch(toggleEntity({ name, value: v }))
   }
 
   const clear = (e: React.MouseEvent) => {
     e.stopPropagation()
     onChange([])
   }
-
-  useEffect(() => {
-    return () => onChange([])
-  }, [])
+  const selected = () => options.filter((o) => value.includes(o.value))
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -88,11 +100,11 @@ export function MultiSelect({
           <CommandList>
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
-              {options.map((opt) => {
+              {availableEntities.map((opt) => {
                 const checked = value.includes(opt.value)
                 return (
                   <CommandItem
-                    key={opt.value}
+                    key={opt.label + opt.value}
                     disabled={opt.disabled}
                     onSelect={() => toggle(opt.value)}
                     className="gap-2"

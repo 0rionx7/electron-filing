@@ -1,22 +1,20 @@
-import { use } from 'react'
-
-import { toast } from 'sonner'
+import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Button } from '@renderer/components/ui/button'
-import { Toaster } from '@renderer/components/ui/sonner'
-
-import { FilesContext } from '@renderer/components/FilesSelection'
-import AppCard from '@renderer/components/AppCard'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
+import { selectRootDirectory, setFileList, setrootDirectory, setStep } from '@renderer/slice/slice'
+import { toast } from 'sonner'
 
 const FolderSelection = (): React.JSX.Element | null => {
-  const { fileEntities, setFileEndities } = use(FilesContext)
-
-  if (fileEntities.length) return null
+  const rootDirectory = useAppSelector(selectRootDirectory)
+  const dispatch = useAppDispatch()
 
   const handleSelect = async (): Promise<void> => {
     try {
-      const fileEntities = await window.api.openFolder()
-      console.log(fileEntities)
-      setFileEndities(fileEntities)
+      const response = await window.api.openFolder()
+      console.log(response)
+      dispatch(setrootDirectory(response.rootDirectory))
+      dispatch(setFileList(response.fileEntities))
+      dispatch(setStep(4))
     } catch {
       toast('Folder selection failed.Please try again.', {
         action: {
@@ -27,12 +25,17 @@ const FolderSelection = (): React.JSX.Element | null => {
     }
   }
   return (
-    <AppCard title="Folder selection utility" description="Please select a folder">
-      <Button className="button" onClick={handleSelect}>
-        Select
-      </Button>
-      <Toaster />
-    </AppCard>
+    <Card className="w-lg bg-stone-300">
+      <CardHeader>
+        <CardTitle>Please select a folder</CardTitle>
+      </CardHeader>
+      <CardContent className="space-x-1">
+        <Button onClick={handleSelect}>Select</Button>
+        <Button onClick={() => dispatch(setStep(2))}>Back</Button>
+        {rootDirectory && <Button onClick={() => dispatch(setStep(4))}>Proceed</Button>}
+      </CardContent>
+      <CardFooter>{rootDirectory && `Selected: ${rootDirectory}`}</CardFooter>
+    </Card>
   )
 }
 

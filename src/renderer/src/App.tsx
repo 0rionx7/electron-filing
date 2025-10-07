@@ -1,14 +1,19 @@
+import { useAppSelector } from '@renderer/app/hooks'
+import AccountDetails from '@renderer/components/AccountDetails'
 import { ChooseFiles } from '@renderer/components/ChooseFiles'
-import { FileSelection } from '@renderer/components/FilesSelection'
 import FolderSelection from '@renderer/components/FolderSelection'
+import PersonalInfo from '@renderer/components/PersonalInfo'
+import { selectStep, StepMap } from '@renderer/slice/slice'
 
 function App(): React.JSX.Element {
+  const step = useAppSelector(selectStep)
+
   return (
     <>
-      <FileSelection>
-        <FolderSelection />
-        <ChooseFiles />
-      </FileSelection>
+      {step === 1 && <AccountDetails title={StepMap[1]} />}
+      {step === 2 && <PersonalInfo title={StepMap[2]} />}
+      {step === 3 && <FolderSelection />}
+      {step === 4 && <ChooseFiles />}
     </>
   )
 }

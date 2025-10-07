@@ -1,8 +1,13 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, session } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { handleFolderSelection } from './utils'
+
+const reduxDevToolsPath =
+  'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd\\3.2.10_0'
+const reactDevToolsPath =
+  'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\6.1.5_1'
 
 function createWindow(): void {
   // Create the browser window.
@@ -39,9 +44,23 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
+
+  await session.defaultSession.extensions.loadExtension(
+    reduxDevToolsPath,
+    // allowFileAccess is required to load the devtools extension on file:// URLs.
+    { allowFileAccess: true }
+  )
+  await session.defaultSession.extensions.loadExtension(
+    reactDevToolsPath,
+    // allowFileAccess is required to load the devtools extension on file:// URLs.
+    { allowFileAccess: true }
+  )
+  // installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+  //   .then(([redux, react]) => console.log(`Added Extensions:  ${redux.name}, ${react.name}`))
+  //   .catch((err) => console.log('An error occurred: ', err))
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
