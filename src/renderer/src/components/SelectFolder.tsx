@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/
 import { selectRootDirectory, setFileList, setRootDirectory, setStep } from '@renderer/slice/slice'
 import { toast } from 'sonner'
 
-const FolderSelection = (): React.JSX.Element | null => {
+const SelectFolder = (): React.JSX.Element | null => {
   const rootDirectory = useAppSelector(selectRootDirectory)
   const dispatch = useAppDispatch()
 
@@ -38,4 +38,4 @@ const FolderSelection = (): React.JSX.Element | null => {
   )
 }
 
-export default FolderSelection
+export default SelectFolder

@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { resetEntity, selectEntities, toggleEntity } from '@renderer/slice/slice'
 
-export type MultiOption = { value: string; label: string; disabled?: boolean }
+export type MultiOption = { value: string; label: string }
 
 type MultiSelectProps = {
   name: 'entity1' | 'entity2'
@@ -106,7 +106,6 @@ export function MultiSelect({
                 return (
                   <CommandItem
                     key={opt.label + opt.value}
-                    disabled={opt.disabled}
                     onSelect={() => toggle(opt.value)}
                     className="gap-2"
                   >

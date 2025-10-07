@@ -1,12 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type Country } from '../lib/schema'
 
-export const StepMap = {
-  1: 'Provide your account details',
-  2: 'Provide your personal info',
-  3: 'You have successfuly been registered'
-}
-
 export type FileEntity = {
   label: string
   value: string

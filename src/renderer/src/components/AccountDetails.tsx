@@ -16,9 +16,7 @@ import {
   FormMessage
 } from '@renderer/components/ui/form'
 
-export type TitleProps = { title: string }
-
-export default function AccountDetails({ title }: TitleProps): React.JSX.Element {
+export default function AccountDetails(): React.JSX.Element {
   const data = useAppSelector(selectFirstStepData)
   const dispatch = useAppDispatch()
   const form = useForm<AccountDetailsType>({
@@ -38,7 +36,7 @@ export default function AccountDetails({ title }: TitleProps): React.JSX.Element
   return (
     <Card className="w-md bg-stone-300">
       <CardHeader>
-        <CardTitle className="text-gray-600">{title}</CardTitle>
+        <CardTitle className="text-gray-600">Provide your account details</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>

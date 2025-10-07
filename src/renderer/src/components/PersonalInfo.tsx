@@ -30,10 +30,9 @@ import {
 } from '@renderer/components/ui/select'
 import DatePicker from '@renderer/components/DatePicker'
 
-export type TitleProps = { title: string }
 const countries: Country[] = ['Greece', 'Cyprus', 'Italy', 'Spain']
 
-export default function PersonalInfo({ title }: TitleProps): React.JSX.Element {
+export default function PersonalInfo(): React.JSX.Element {
   const { username } = useAppSelector(selectFirstStepData)
   const data = useAppSelector(selectSecondStepData)
   const dispatch = useAppDispatch()
@@ -65,7 +64,7 @@ export default function PersonalInfo({ title }: TitleProps): React.JSX.Element {
   return (
     <Card className="w-full bg-stone-300">
       <CardHeader>
-        <CardTitle className="text-gray-600">{title}</CardTitle>
+        <CardTitle className="text-gray-600">Provide your personal info</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
