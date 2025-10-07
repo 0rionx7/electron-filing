@@ -5,9 +5,15 @@ import { Button } from '@renderer/components/ui/button'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { selectEntity1, selectEntity2, selectFileList, setStep } from '@renderer/slice/slice'
+import {
+  selectEntity1,
+  selectEntity2,
+  selectFileList,
+  selectRootDirectory,
+  setStep
+} from '@renderer/slice/slice'
 
-type Form = {
+type FilesSelection = {
   entity1: string[]
   entity2: string[]
 }
@@ -16,14 +22,17 @@ export function ChooseFiles(): React.JSX.Element | null {
   const fileList = useAppSelector(selectFileList)
   const entity1 = useAppSelector(selectEntity1)
   const entity2 = useAppSelector(selectEntity2)
+  const rootDirectory = useAppSelector(selectRootDirectory)
   const dispatch = useAppDispatch()
-  const { handleSubmit, control } = useForm<Form>({ defaultValues: { entity1, entity2 } })
+  const { handleSubmit, control } = useForm<FilesSelection>({ defaultValues: { entity1, entity2 } })
 
   const options: MultiOption[] = fileList
 
-  const onSubmit: SubmitHandler<Form> = (data) => {
-    console.log(fileList)
-    console.log(data)
+  const onSubmit: SubmitHandler<FilesSelection> = (data) => {
+    const ent1 = entity1.map((e) => ({ label: e.split('\\').pop(), value: e }))
+    const ent2 = entity2.map((e) => ({ label: e.split('\\').pop(), value: e }))
+    const fileMapping = { rootDirectory, entity1: ent1, entity2: ent2 }
+    console.log(fileMapping)
   }
 
   return (

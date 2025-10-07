@@ -3,11 +3,10 @@ import AccountDetails from '@renderer/components/AccountDetails'
 import { ChooseFiles } from '@renderer/components/ChooseFiles'
 import FolderSelection from '@renderer/components/FolderSelection'
 import PersonalInfo from '@renderer/components/PersonalInfo'
-import { selectFileList, selectStep, StepMap } from '@renderer/slice/slice'
+import { selectStep, StepMap } from '@renderer/slice/slice'
 
 function App(): React.JSX.Element {
   const step = useAppSelector(selectStep)
-  const files = useAppSelector(selectFileList)
 
   return (
     <>

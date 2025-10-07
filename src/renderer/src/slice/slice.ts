@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type Country } from '../lib/schema'
-import { RootState } from '@renderer/app/store'
 
 export const StepMap = {
   1: 'Provide your account details',
