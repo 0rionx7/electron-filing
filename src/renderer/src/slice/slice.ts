@@ -116,6 +116,3 @@ export const {
   selectEntity2,
   selectEntities
 } = registerSlice.selectors
-
-export const selectEntity = (key: 'entity1' | 'entity2') => (state: RootState) =>
-  state.register.data.entities[key]

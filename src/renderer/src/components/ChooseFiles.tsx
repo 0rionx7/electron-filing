@@ -5,7 +5,7 @@ import { Button } from '@renderer/components/ui/button'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { selectFileList, setStep } from '@renderer/slice/slice'
+import { selectEntity1, selectEntity2, selectFileList, setStep } from '@renderer/slice/slice'
 
 type Form = {
   entity1: string[]
@@ -13,9 +13,11 @@ type Form = {
 }
 
 export function ChooseFiles(): React.JSX.Element | null {
-  const { handleSubmit, control } = useForm<Form>({ defaultValues: { entity1: [], entity2: [] } })
   const fileList = useAppSelector(selectFileList)
+  const entity1 = useAppSelector(selectEntity1)
+  const entity2 = useAppSelector(selectEntity2)
   const dispatch = useAppDispatch()
+  const { handleSubmit, control } = useForm<Form>({ defaultValues: { entity1, entity2 } })
 
   const options: MultiOption[] = fileList
 
