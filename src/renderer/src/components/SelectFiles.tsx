@@ -95,7 +95,7 @@ export function SelectFiles(): React.JSX.Element | null {
               onClick={() => {
                 dispatch(setStep(3))
               }}
-              className="mr-4"
+              className="mr-4 mb-0"
             >
               Back
             </Button>

@@ -1,3 +1,4 @@
+import { addYears, isBefore, isEqual, startOfDay } from 'date-fns'
 import { z } from 'zod'
 
 export type Country = 'Greece' | 'Cyprus' | 'Italy' | 'Spain'
@@ -38,19 +39,15 @@ export const PersonalInfoSchema = (username: string) =>
         })
       }
       const { dateOfBirth } = val
-      const today = new Date()
-      const age = today.getFullYear() - dateOfBirth.getFullYear()
-      const hasBirthdayPassed =
-        today.getMonth() > dateOfBirth.getMonth() ||
-        (today.getMonth() === dateOfBirth.getMonth() && today.getDate() >= dateOfBirth.getDate())
-      const actualAge = hasBirthdayPassed ? age : age - 1
-      if (actualAge < 18) {
+      const eighteenth = addYears(startOfDay(dateOfBirth), 18)
+      const today = startOfDay(new Date())
+      const isOlderThan18 = isBefore(eighteenth, today) || isEqual(eighteenth, today)
+      if (!isOlderThan18)
         ctx.addIssue({
           code: 'custom',
           message: 'You must be over 18',
           path: ['dateOfBirth']
         })
-      }
     })
 
 export type AccountDetailsType = z.infer<typeof AccountDetailsSchema>

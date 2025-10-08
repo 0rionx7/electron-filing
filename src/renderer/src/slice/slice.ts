@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type Country } from '../lib/schema'
+import { AccountDetailsType, type Country } from '../lib/schema'
 
 export type FileEntity = {
   label: string
@@ -7,11 +7,7 @@ export type FileEntity = {
 }
 
 type RegisterDataType = {
-  firstStep: {
-    username: string
-    password: string
-    confirmPassword: string
-  }
+  firstStep: AccountDetailsType
   secondStep: {
     firstName: string
     lastName: string

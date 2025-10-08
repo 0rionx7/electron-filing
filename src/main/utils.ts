@@ -5,10 +5,6 @@ type FileEntity = {
   label: string
   value: string
 }
-type FolderEntity = {
-  level: number
-  path: string
-}
 
 const DEPTH = 5
 
@@ -19,28 +15,20 @@ export async function handleFolderSelection(): Promise<{
   const { filePaths } = await dialog.showOpenDialog({
     properties: ['openDirectory']
   })
-  const rootDirectory = filePaths[0]
-  const folderEntry = { level: 1, path: rootDirectory }
+  const rootPath = filePaths[0]
   const fileEntities: FileEntity[] = []
 
-  await findFileEntities(folderEntry)
+  await findFileEntities(1, rootPath)
 
-  async function findFileEntities(folderEntry: FolderEntity): Promise<void> {
-    const folderEntries: FolderEntity[] = []
-    const items = await fs.readdir(folderEntry.path, { withFileTypes: true })
+  async function findFileEntities(level: number, folderPath: string): Promise<void> {
+    const items = await fs.readdir(folderPath, { withFileTypes: true })
 
     for (const item of items) {
       const path = `${item.parentPath}\\${item.name}`
       if (item.isFile()) fileEntities.push({ label: item.name, value: path })
-      else if (folderEntry.level < DEPTH) folderEntries.push({ level: folderEntry.level + 1, path })
-    }
-
-    if (folderEntries.length) {
-      for (const folderEntity of folderEntries) {
-        await findFileEntities(folderEntity)
-      }
+      else if (level < DEPTH) await findFileEntities(level + 1, path)
     }
   }
 
-  return { rootDirectory, fileEntities }
+  return { rootDirectory: rootPath, fileEntities }
 }
