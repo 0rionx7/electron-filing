@@ -9,7 +9,7 @@ declare global {
         rootDirectory: string
         fileEntities: FileEntity[]
       }>
-      choosenFiles: (data) => Promise<never>
+      sendFiles: (data) => Promise<never>
       // add any other methods you expose from preload
     }
   }

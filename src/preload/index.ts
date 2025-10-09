@@ -4,7 +4,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
-  choosenFiles: (files) => ipcRenderer.invoke('send-files', files)
+  sendFiles: (files) => ipcRenderer.invoke('send-files', files)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

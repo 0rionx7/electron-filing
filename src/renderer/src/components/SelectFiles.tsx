@@ -40,7 +40,7 @@ export function SelectFiles(): React.JSX.Element | null {
     const ent1 = entity1.map((e) => ({ label: e.split('\\').pop(), value: e }))
     const ent2 = entity2.map((e) => ({ label: e.split('\\').pop(), value: e }))
     const fileMapping = { rootDirectory, entity1: ent1, entity2: ent2 }
-    await window.api.choosenFiles(fileMapping)
+    await window.api.sendFiles(fileMapping)
     dispatch(setStep(5))
   }
 
