@@ -4,6 +4,7 @@ import SelectFolder from '@renderer/components/SelectFolder'
 import PersonalInfo from '@renderer/components/PersonalInfo'
 import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
+import { Button } from '@renderer/components/ui/button'
 
 function App(): React.JSX.Element {
   const handleFetch = async (): Promise<void> => {
@@ -13,7 +14,9 @@ function App(): React.JSX.Element {
 
   return (
     <Stepper>
-      <button onClick={handleFetch}>Fetch</button>
+      <Button onClick={handleFetch} className="mb-1 bg-teal-400 hover:bg-teal-600">
+        HandShake
+      </Button>
       <Step when={1}>
         <AccountDetails />
       </Step>
