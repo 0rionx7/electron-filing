@@ -9,15 +9,13 @@ import {
 } from '@renderer/components/ui/command'
 import { Button } from '@renderer/components/ui/button'
 import { Checkbox } from '@renderer/components/ui/checkbox'
+import { X } from 'lucide-react'
 import { cn } from '@renderer/lib/utils'
-import { useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { resetEntity, selectEntities, toggleEntity } from '@renderer/slice/slice'
+import { useMemo, useState } from 'react'
 
-export type MultiOption = { value: string; label: string }
+export type MultiOption = { value: string; label: string; disabled?: boolean }
 
 type MultiSelectProps = {
-  name: 'entity1' | 'entity2'
   value: string[]
   onChange: (next: string[]) => void
   options: MultiOption[]
@@ -27,7 +25,6 @@ type MultiSelectProps = {
 }
 
 export function MultiSelect({
-  name,
   value,
   onChange,
   options,
@@ -37,32 +34,18 @@ export function MultiSelect({
 }: MultiSelectProps) {
   const [open, setOpen] = useState(false)
 
-  const entities = useAppSelector(selectEntities)
-  const dispatch = useAppDispatch()
-
-  let selectedEntities: any[] = []
-
-  for (const entityKey in entities) {
-    if (entityKey !== name) selectedEntities = [...selectedEntities, ...entities[entityKey]]
-  }
-
-  const availableEntities = options.filter(({ value }) => {
-    return !selectedEntities.includes(value)
-  })
+  const selected = useMemo(() => options.filter((o) => value.includes(o.value)), [options, value])
 
   const toggle = (v: string) => {
     const set = new Set(value)
     set.has(v) ? set.delete(v) : set.add(v)
     onChange([...set])
-    dispatch(toggleEntity({ name, value: v }))
   }
 
-  const clear = (e: React.MouseEvent, name: string) => {
+  const clear = (e: React.MouseEvent) => {
     e.stopPropagation()
     onChange([])
-    dispatch(resetEntity(name))
   }
-  const selected = availableEntities.filter((e) => value.includes(e.value))
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -85,11 +68,11 @@ export function MultiSelect({
             <span>{placeholder}</span>
           )}
           {selected.length > 0 && (
-            <span
-              className="ml-2 size-4 opacity-60 hover:opacity-100 flex items-center justify-center"
-              onClick={(e) => clear(e, name)}
-            >
-              X
+            <span onClick={clear}>
+              <X
+                className="ml-2 size-4 opacity-60 hover:opacity-100 cursor-pointer"
+                onClick={clear}
+              />
             </span>
           )}
         </Button>
@@ -101,11 +84,12 @@ export function MultiSelect({
           <CommandList>
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
-              {availableEntities.map((opt) => {
+              {options.map((opt) => {
                 const checked = value.includes(opt.value)
                 return (
                   <CommandItem
-                    key={opt.label + opt.value}
+                    key={opt.value}
+                    disabled={opt.disabled}
                     onSelect={() => toggle(opt.value)}
                     className="gap-2"
                   >

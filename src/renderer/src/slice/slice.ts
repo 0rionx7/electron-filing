@@ -68,11 +68,14 @@ export const registerSlice = createSlice({
     setFileList: (state, action: PayloadAction<FileEntity[]>) => {
       state.data.fileList = action.payload
     },
-    toggleEntity: (state, action: PayloadAction<{ name: string; value: string }>) => {
-      const { value, name } = action.payload
-      const set = new Set(state.data.entities[name])
-      set.has(value) ? set.delete(value) : set.add(value)
-      state.data.entities[name] = [...set]
+    setEntities: (
+      state,
+      action: PayloadAction<{
+        entity1: string[]
+        entity2: string[]
+      }>
+    ) => {
+      state.data.entities = action.payload
     },
     setStep: (state, action: PayloadAction<number>) => {
       state.step = action.payload
@@ -100,7 +103,7 @@ export const {
   setStep,
   setRootDirectory,
   setFileList,
-  toggleEntity,
+  setEntities,
   resetEntity,
   reset
 } = registerSlice.actions

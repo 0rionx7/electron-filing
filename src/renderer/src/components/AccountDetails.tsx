@@ -27,7 +27,6 @@ export default function AccountDetails(): React.JSX.Element {
       confirmPassword: data.confirmPassword
     }
   })
-
   const onSubmit: SubmitHandler<AccountDetailsType> = (data) => {
     dispatch(updateFirstStepData(data))
     dispatch(setStep(2))

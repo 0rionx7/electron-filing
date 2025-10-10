@@ -1,6 +1,5 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import { MultiSelect, type MultiOption } from '@renderer/components/ui/multi-select'
 import { Button } from '@renderer/components/ui/button'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
@@ -20,8 +19,9 @@ import {
   FormLabel,
   FormMessage
 } from '@renderer/components/ui/form'
+import FilteredMultiSelect from '@renderer/components/FilteredMultiSelect'
 
-type FilesSelection = {
+export type FilesSelection = {
   entity1: string[]
   entity2: string[]
 }
@@ -33,8 +33,6 @@ export function SelectFiles(): React.JSX.Element | null {
   const rootDirectory = useAppSelector(selectRootDirectory)
   const dispatch = useAppDispatch()
   const form = useForm<FilesSelection>({ defaultValues: { entity1, entity2 } })
-
-  const options: MultiOption[] = fileList
 
   const onSubmit: SubmitHandler<FilesSelection> = async () => {
     const ent1 = entity1.map((e) => ({ label: e.split('\\').pop(), value: e }))
@@ -59,13 +57,7 @@ export function SelectFiles(): React.JSX.Element | null {
                 <FormItem>
                   <FormLabel>List 1</FormLabel>
                   <FormControl>
-                    <MultiSelect
-                      name="entity1"
-                      value={field.value}
-                      onChange={field.onChange}
-                      options={options}
-                      placeholder="Choose files"
-                    />
+                    <FilteredMultiSelect name="entity1" options={fileList} field={field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -78,13 +70,7 @@ export function SelectFiles(): React.JSX.Element | null {
                 <FormItem>
                   <FormLabel>List 2</FormLabel>
                   <FormControl>
-                    <MultiSelect
-                      name="entity2"
-                      value={field.value}
-                      onChange={field.onChange}
-                      options={options}
-                      placeholder="Choose files"
-                    />
+                    <FilteredMultiSelect name="entity2" options={fileList} field={field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
