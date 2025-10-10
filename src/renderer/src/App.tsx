@@ -6,8 +6,14 @@ import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
 
 function App(): React.JSX.Element {
+  const handleFetch = async (): Promise<void> => {
+    const response = await window.api.handShake()
+    console.log(response)
+  }
+
   return (
     <Stepper>
+      <button onClick={handleFetch}>Fetch</button>
       <Step when={1}>
         <AccountDetails />
       </Step>

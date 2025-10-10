@@ -1,15 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { events } from '../main/utils'
 
-// Custom APIs for renderer
 const api = {
-  openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
-  sendFiles: (files) => ipcRenderer.invoke('send-files', files)
+  handShake: () => ipcRenderer.invoke(events.API_HANDSHAKE),
+  openFolder: () => ipcRenderer.invoke(events.DIALOG_OPEN_FOLDER),
+  sendFiles: (files) => ipcRenderer.invoke(events.SENT_FILES, files)
 }
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)

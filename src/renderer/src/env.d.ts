@@ -10,6 +10,7 @@ declare global {
         fileEntities: FileEntity[]
       }>
       sendFiles: (data) => Promise<never>
+      handShake: () => Promise<never>
       // add any other methods you expose from preload
     }
   }

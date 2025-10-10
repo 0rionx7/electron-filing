@@ -1,11 +1,16 @@
 import { promises as fs } from 'fs'
 import { dialog } from 'electron'
 
+export const events = {
+  DIALOG_OPEN_FOLDER: 'dialog:openFolder',
+  SENT_FILES: 'send-files',
+  API_HANDSHAKE: 'api:handShake'
+}
+
 type FileEntity = {
   label: string
   value: string
 }
-
 const DEPTH = 5
 
 export async function handleFolderSelection(): Promise<{
