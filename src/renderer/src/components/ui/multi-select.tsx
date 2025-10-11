@@ -47,6 +47,25 @@ export function MultiSelect({
     onChange([])
   }
 
+  const placeHolder = (
+    <>
+      {selected.length > 0 && (
+        <>
+          <span>
+            {selected.length} file{selected.length === 1 ? '' : 's'} selected
+          </span>
+          <span onClick={clear}>
+            <X
+              className="ml-2 size-4 opacity-60 hover:opacity-100 cursor-pointer"
+              onClick={clear}
+            />
+          </span>
+        </>
+      )}
+      {selected.length === 0 && <span>{placeholder}</span>}
+    </>
+  )
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -60,21 +79,7 @@ export function MultiSelect({
             selected.length === 0 && 'text-muted-foreground'
           )}
         >
-          {selected.length > 0 ? (
-            <span>
-              {selected.length} file{selected.length === 1 ? '' : 's'} selected
-            </span>
-          ) : (
-            <span>{placeholder}</span>
-          )}
-          {selected.length > 0 && (
-            <span onClick={clear}>
-              <X
-                className="ml-2 size-4 opacity-60 hover:opacity-100 cursor-pointer"
-                onClick={clear}
-              />
-            </span>
-          )}
+          {placeHolder}
         </Button>
       </PopoverTrigger>
 
