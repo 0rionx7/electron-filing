@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import { dialog } from 'electron'
 
-export const events = {
+export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',
   SENT_FILES: 'send-files',
   API_HANDSHAKE: 'api:handShake'
