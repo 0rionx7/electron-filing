@@ -10,10 +10,10 @@ const reduxDevToolsPath =
 const reactDevToolsPath =
   'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\7.0.0_0'
 
-let baseUrl: string
-
 function createWindow(): void {
-  baseUrl = startExpress()
+  const baseUrl = startExpress()
+
+  registerHandlers(baseUrl)
 
   const mainWindow = new BrowserWindow({
     width: 1300,
@@ -59,7 +59,6 @@ app.whenReady().then(async () => {
   })
 
   createWindow()
-  registerHandlers(baseUrl)
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
