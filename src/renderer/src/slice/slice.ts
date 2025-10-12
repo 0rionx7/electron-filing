@@ -59,29 +59,19 @@ export const registerSlice = createSlice({
       state.data.secondStep = { ...state.data.secondStep, ...action.payload }
     },
     setRootDirectory: (state, action: PayloadAction<string>) => {
-      if (state.data.rootDirectory !== action.payload) {
-        state.data.entities.entity1 = []
-        state.data.entities.entity2 = []
-      }
+      if (state.data.rootDirectory !== action.payload)
+        state.data.entities = { entity1: [], entity2: [] }
       state.data.rootDirectory = action.payload
     },
     setFileList: (state, action: PayloadAction<FileEntity[]>) => {
       state.data.fileList = action.payload
     },
-    setEntities: (
-      state,
-      action: PayloadAction<{
-        entity1: string[]
-        entity2: string[]
-      }>
-    ) => {
-      state.data.entities = action.payload
+    setEntity: (state, action: PayloadAction<{ key: 'entity1' | 'entity2'; values: string[] }>) => {
+      const { key, values } = action.payload
+      state.data.entities[key] = values
     },
     setStep: (state, action: PayloadAction<number>) => {
       state.step = action.payload
-    },
-    resetEntity: (state, action: PayloadAction<string>) => {
-      state.data.entities[action.payload] = []
     },
     reset: () => initialState
   },
@@ -103,8 +93,7 @@ export const {
   setStep,
   setRootDirectory,
   setFileList,
-  setEntities,
-  resetEntity,
+  setEntity,
   reset
 } = registerSlice.actions
 export const {

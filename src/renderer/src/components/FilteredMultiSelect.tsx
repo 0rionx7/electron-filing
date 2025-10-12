@@ -4,10 +4,10 @@ import { ControllerRenderProps, useFormContext } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { FilesSelection } from '@renderer/components/SelectFiles'
 import { MultiOption, MultiSelect } from '@renderer/components/ui/multi-select'
-import { selectEntities, setEntities } from '@renderer/slice/slice'
+import { selectEntities, setEntity } from '@renderer/slice/slice'
 
 type FilteredMultiselectType = {
-  name: string
+  name: 'entity1' | 'entity2'
   options: MultiOption[]
   field: ControllerRenderProps<FilesSelection, 'entity1' | 'entity2'>
 }
@@ -23,18 +23,14 @@ const FilteredMultiSelect = ({
 
   useEffect(() => {
     const subscription = watch((data) => {
-      dispatch(
-        setEntities({
-          entity1: (data.entity1 ?? []).filter((x): x is string => x !== undefined),
-          entity2: (data.entity2 ?? []).filter((x): x is string => x !== undefined)
-        })
-      )
+      const values = (data[name] ?? []).filter((x): x is string => x !== undefined)
+      dispatch(setEntity({ key: name, values }))
     })
 
     return () => {
       subscription.unsubscribe()
     }
-  }, [watch, dispatch])
+  }, [watch, name, dispatch])
 
   let selectedEntities: string[] = []
 
