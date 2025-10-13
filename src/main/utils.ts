@@ -1,5 +1,6 @@
-import { promises as fs } from 'fs'
 import { dialog } from 'electron'
+import { promises as fs } from 'fs'
+import path from 'path'
 
 export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',
@@ -29,9 +30,9 @@ export async function handleFolderSelection(): Promise<{
     const items = await fs.readdir(folderPath, { withFileTypes: true })
 
     for (const item of items) {
-      const path = `${item.parentPath}\\${item.name}`
-      if (item.isFile()) fileEntities.push({ label: item.name, value: path })
-      else if (level < DEPTH) await findFileEntities(level + 1, path)
+      const filePath = path.join(item.parentPath, item.name)
+      if (item.isFile()) fileEntities.push({ label: item.name, value: filePath })
+      else if (level < DEPTH) await findFileEntities(level + 1, filePath)
     }
   }
 
