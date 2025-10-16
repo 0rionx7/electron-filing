@@ -5,12 +5,19 @@ import PersonalInfo from '@renderer/components/PersonalInfo'
 import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
+import { useEffect } from 'react'
 
 function App(): React.JSX.Element {
   const handleFetch = async (): Promise<void> => {
     const response = await window.api.handShake()
     console.log(response)
   }
+
+  useEffect(() => {
+    window.api.onReceivePortlist((_event, list) => {
+      console.log(list)
+    })
+  }, [])
 
   return (
     <Stepper>

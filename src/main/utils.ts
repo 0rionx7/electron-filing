@@ -5,7 +5,8 @@ import path from 'path'
 export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',
   SENT_FILES: 'send-files',
-  API_HANDSHAKE: 'api:handShake'
+  API_HANDSHAKE: 'api:handShake',
+  PORTS_READY: 'ports-ready'
 }
 
 type FileEntity = {

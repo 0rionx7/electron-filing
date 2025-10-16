@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { startExpress } from './expressApp'
 import { registerHandlers } from './ipcHandlers'
+import { EVENTS } from './utils'
 
 const reduxDevToolsPath =
   'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd\\3.2.10_0'
@@ -44,6 +45,10 @@ function createWindow(): void {
   }
 
   mainWindow.webContents.openDevTools()
+
+  setTimeout(() => {
+    mainWindow.webContents.send(EVENTS.PORTS_READY, [1, 2, 3])
+  }, 7000)
 }
 
 app.whenReady().then(async () => {

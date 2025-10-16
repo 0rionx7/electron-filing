@@ -11,7 +11,9 @@ declare global {
       }>
       sendFiles: (data) => Promise<never>
       handShake: () => Promise<never>
-      // add any other methods you expose from preload
+      onReceivePortlist: (
+        callback: (event: Electron.IpcRendererEvent, list: string[]) => void
+      ) => void
     }
   }
 }

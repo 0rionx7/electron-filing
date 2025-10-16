@@ -1,11 +1,13 @@
+import { ApiType } from './index.d'
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { EVENTS } from '../main/utils'
 
-const api = {
+const api: ApiType = {
   handShake: () => ipcRenderer.invoke(EVENTS.API_HANDSHAKE),
   openFolder: () => ipcRenderer.invoke(EVENTS.DIALOG_OPEN_FOLDER),
-  sendFiles: (files) => ipcRenderer.invoke(EVENTS.SENT_FILES, files)
+  sendFiles: (files) => ipcRenderer.invoke(EVENTS.SENT_FILES, files),
+  onReceivePortlist: (callback) => ipcRenderer.on(EVENTS.PORTS_READY, callback)
 }
 
 if (process.contextIsolated) {
