@@ -9,14 +9,18 @@ import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { selectExpressUrl, setExpressUrl, setPorts } from '@renderer/slices/backendApiSlice'
+import { useHandShakeQuery } from '@renderer/api/api'
 
 function App(): React.JSX.Element {
   const expressUrl = useAppSelector(selectExpressUrl)
+  const { data, refetch } = useHandShakeQuery(undefined)
   const dispatch = useAppDispatch()
 
   const handleFetch = async (): Promise<void> => {
     const response = await fetch(expressUrl)
-    const data = await response.json()
+    const msg = await response.json()
+    refetch()
+    console.log(msg)
     console.log(data)
   }
 
