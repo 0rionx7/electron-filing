@@ -16,7 +16,7 @@ let expressUrl: string
 function createWindow(): void {
   expressUrl = startExpress()
 
-  registerHandlers(expressUrl)
+  registerHandlers()
 
   const mainWindow = new BrowserWindow({
     width: 1300,
@@ -32,6 +32,7 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.send(EVENTS.GET_EXPRESS_URL, expressUrl)
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

@@ -7,7 +7,7 @@ const api: ApiType = {
   openFolder: () => ipcRenderer.invoke(EVENTS.DIALOG_OPEN_FOLDER),
   sendFiles: (files) => ipcRenderer.invoke(EVENTS.SENT_FILES, files),
   onReceivePortlist: (callback) => ipcRenderer.on(EVENTS.PORTS_READY, callback),
-  getExpressUrl: () => ipcRenderer.invoke(EVENTS.GET_EXPRESS_URL)
+  getExpressUrl: (callback) => ipcRenderer.on(EVENTS.GET_EXPRESS_URL, callback)
 }
 
 if (process.contextIsolated) {

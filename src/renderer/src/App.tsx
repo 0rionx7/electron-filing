@@ -7,20 +7,23 @@ import PersonalInfo from '@renderer/components/PersonalInfo'
 import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
-import { useAppDispatch } from '@renderer/app/hooks'
-import { setPorts } from '@renderer/slices/portsSlice'
+import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
+import { selectExpressUrl, setExpressUrl, setPorts } from '@renderer/slices/backendApiSlice'
 
 function App(): React.JSX.Element {
+  const expressUrl = useAppSelector(selectExpressUrl)
   const dispatch = useAppDispatch()
 
   const handleFetch = async (): Promise<void> => {
-    const expressUrl = await window.api.getExpressUrl()
     const response = await fetch(expressUrl)
     const data = await response.json()
     console.log(data)
   }
 
   useEffect(() => {
+    window.api.getExpressUrl((_event, url) => {
+      dispatch(setExpressUrl(url))
+    })
     window.api.onReceivePortlist((_event, list) => {
       dispatch(setPorts(list))
     })

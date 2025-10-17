@@ -13,7 +13,7 @@ declare global {
       onReceivePortlist: (
         callback: (event: Electron.IpcRendererEvent, list: string[]) => void
       ) => void
-      getExpressUrl: () => Promise<string>
+      getExpressUrl: (callback: (event: Electron.IpcRendererEvent, url: string) => void) => void
     }
   }
 }
