@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import AccountDetails from '@renderer/components/AccountDetails'
 import { SelectFiles } from '@renderer/components/SelectFiles'
 import SelectFolder from '@renderer/components/SelectFolder'
@@ -5,19 +7,24 @@ import PersonalInfo from '@renderer/components/PersonalInfo'
 import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
-import { useEffect } from 'react'
+import { useAppDispatch } from '@renderer/app/hooks'
+import { setPorts } from '@renderer/slices/portsSlice'
 
 function App(): React.JSX.Element {
+  const dispatch = useAppDispatch()
+
   const handleFetch = async (): Promise<void> => {
-    const response = await window.api.handShake()
-    console.log(response)
+    const expressUrl = await window.api.getExpressUrl()
+    const response = await fetch(expressUrl)
+    const data = await response.json()
+    console.log(data)
   }
 
   useEffect(() => {
     window.api.onReceivePortlist((_event, list) => {
-      console.log(list)
+      dispatch(setPorts(list))
     })
-  }, [])
+  }, [dispatch])
 
   return (
     <Stepper>

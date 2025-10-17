@@ -2,11 +2,8 @@ import { ipcMain } from 'electron'
 
 import { EVENTS, handleFolderSelection } from './utils'
 
-export function registerHandlers(baseUrl: string): void {
-  ipcMain.handle(EVENTS.API_HANDSHAKE, async () => {
-    const res = await fetch(baseUrl)
-    return res.json()
-  })
+export function registerHandlers(expressUrl: string): void {
+  ipcMain.handle(EVENTS.GET_EXPRESS_URL, () => expressUrl)
 
   ipcMain.handle(EVENTS.DIALOG_OPEN_FOLDER, async () => {
     const fileEntities = await handleFolderSelection()

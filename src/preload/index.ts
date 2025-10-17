@@ -4,10 +4,10 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { EVENTS } from '../main/utils'
 
 const api: ApiType = {
-  handShake: () => ipcRenderer.invoke(EVENTS.API_HANDSHAKE),
   openFolder: () => ipcRenderer.invoke(EVENTS.DIALOG_OPEN_FOLDER),
   sendFiles: (files) => ipcRenderer.invoke(EVENTS.SENT_FILES, files),
-  onReceivePortlist: (callback) => ipcRenderer.on(EVENTS.PORTS_READY, callback)
+  onReceivePortlist: (callback) => ipcRenderer.on(EVENTS.PORTS_READY, callback),
+  getExpressUrl: () => ipcRenderer.invoke(EVENTS.GET_EXPRESS_URL)
 }
 
 if (process.contextIsolated) {

@@ -10,10 +10,10 @@ declare global {
         fileEntities: FileEntity[]
       }>
       sendFiles: (data) => Promise<never>
-      handShake: () => Promise<never>
       onReceivePortlist: (
         callback: (event: Electron.IpcRendererEvent, list: string[]) => void
       ) => void
+      getExpressUrl: () => Promise<string>
     }
   }
 }

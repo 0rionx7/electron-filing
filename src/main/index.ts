@@ -11,10 +11,12 @@ const reduxDevToolsPath =
 const reactDevToolsPath =
   'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\7.0.0_0'
 
-function createWindow(): void {
-  const baseUrl = startExpress()
+let expressUrl: string
 
-  registerHandlers(baseUrl)
+function createWindow(): void {
+  expressUrl = startExpress()
+
+  registerHandlers(expressUrl)
 
   const mainWindow = new BrowserWindow({
     width: 1300,
@@ -53,6 +55,23 @@ function createWindow(): void {
 
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.electron')
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    const csp = [
+      "default-src 'self'",
+      `connect-src 'self' ${expressUrl}`,
+      "img-src 'self' data:",
+      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='"
+    ].join('; ')
+
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [csp]
+      }
+    })
+  })
 
   await session.defaultSession.extensions.loadExtension(reduxDevToolsPath, {
     allowFileAccess: true
