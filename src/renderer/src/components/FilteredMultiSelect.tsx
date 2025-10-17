@@ -4,7 +4,7 @@ import { ControllerRenderProps, useFormContext } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { FilesSelection } from '@renderer/components/SelectFiles'
 import { MultiOption, MultiSelect } from '@renderer/components/ui/multi-select'
-import { selectEntities, setEntity } from '@renderer/slice/slice'
+import { selectEntities, setEntity } from '@renderer/slices/registerSlice'
 
 type FilteredMultiselectType = {
   name: 'entity1' | 'entity2'

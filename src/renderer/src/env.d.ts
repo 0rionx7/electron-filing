@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { FileEntity } from '@renderer/slice/slice'
+import { FileEntity } from '@renderer/slices/registerSlice'
 
 declare global {
   interface Window {

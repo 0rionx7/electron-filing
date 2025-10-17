@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
 
 import { useAppSelector } from '@renderer/app/hooks'
-import { selectStep } from '@renderer/slice/slice'
+import { selectStep } from '@renderer/slices/registerSlice'
 
 const StepContext = createContext<number>(1)
 const useStep = (): number => useContext(StepContext)

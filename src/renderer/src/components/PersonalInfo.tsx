@@ -11,7 +11,7 @@ import {
   selectSecondStepData,
   setStep,
   updateSecondStepData
-} from '@renderer/slice/slice'
+} from '@renderer/slices/registerSlice'
 import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import {
   Form,

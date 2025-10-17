@@ -10,7 +10,7 @@ import {
   selectFileList,
   selectRootDirectory,
   setStep
-} from '@renderer/slice/slice'
+} from '@renderer/slices/registerSlice'
 import {
   Form,
   FormControl,

@@ -1,7 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Button } from '@renderer/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import { selectRootDirectory, setFileList, setRootDirectory, setStep } from '@renderer/slice/slice'
+import {
+  selectRootDirectory,
+  setFileList,
+  setRootDirectory,
+  setStep
+} from '@renderer/slices/registerSlice'
 import { toast } from 'sonner'
 
 const SelectFolder = (): React.JSX.Element | null => {

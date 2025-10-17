@@ -1,7 +1,7 @@
 import { useAppDispatch } from '@renderer/app/hooks'
 import { Button } from '@renderer/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import { reset, setStep } from '@renderer/slice/slice'
+import { reset, setStep } from '@renderer/slices/registerSlice'
 
 const Success = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
