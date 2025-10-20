@@ -13,6 +13,6 @@ export type ApiType = {
     fileEntities: FileEntity[]
   }>
   sendFiles: (data: string[]) => Promise<unknown>
-  onReceivePortlist: (callback: (event: Electron.IpcRendererEvent, list: string[]) => void) => void
-  getExpressUrl: (callback: (event: Electron.IpcRendererEvent, url: string) => void) => void
+  onReceivePortlist: (callback: (list: number[]) => void) => () => Electron.IpcRenderer
+  onReceiveExpressPort: (callback: (port: number) => void) => () => Electron.IpcRenderer
 }

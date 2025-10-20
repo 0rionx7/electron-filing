@@ -2,10 +2,10 @@ import type { Action, ThunkAction } from '@reduxjs/toolkit'
 import { combineSlices, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { appApi } from '@renderer/api/api'
-import { backendApiSlice } from '@renderer/slices/backendApiSlice'
+import { backendPortsSlice } from '@renderer/slices/backendPortsSlice'
 import { registerSlice } from '@renderer/slices/registerSlice'
 
-const rootReducer = combineSlices(registerSlice, backendApiSlice, appApi)
+const rootReducer = combineSlices(registerSlice, backendPortsSlice, appApi)
 
 export type RootState = ReturnType<typeof rootReducer>
 

@@ -9,13 +9,9 @@ import { EVENTS } from './utils'
 const reduxDevToolsPath =
   'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd\\3.2.10_0'
 
-let expressUrl: string
+let expressPort: number
 
 function createWindow(): void {
-  expressUrl = startExpress()
-
-  registerHandlers()
-
   const mainWindow = new BrowserWindow({
     width: 1300,
     height: 900,
@@ -30,7 +26,10 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.send(EVENTS.GET_EXPRESS_URL, expressUrl)
+    setTimeout(() => {
+      mainWindow.webContents.send(EVENTS.GET_EXPRESS_PORT, expressPort)
+      mainWindow.webContents.send(EVENTS.GET_BACKEND_PORTS, [1, 2, 3])
+    }, 2000)
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -44,19 +43,18 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
-  setTimeout(() => {
-    mainWindow.webContents.send(EVENTS.PORTS_READY, [1, 2, 3])
-  }, 7000)
 }
 
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.electron')
 
+  expressPort = startExpress()
+  registerHandlers()
+
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     const csp = [
       "default-src 'self'",
-      `connect-src 'self' ${expressUrl}`,
+      `connect-src 'self' http://localhost:${expressPort}`,
       "img-src 'self' data:",
       "style-src 'self' 'unsafe-inline'",
       "script-src 'self' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='"

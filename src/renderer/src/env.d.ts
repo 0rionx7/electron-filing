@@ -10,10 +10,8 @@ declare global {
         fileEntities: FileEntity[]
       }>
       sendFiles: (data) => Promise<never>
-      onReceivePortlist: (
-        callback: (event: Electron.IpcRendererEvent, list: string[]) => void
-      ) => void
-      getExpressUrl: (callback: (event: Electron.IpcRendererEvent, url: string) => void) => void
+      onReceivePortlist: (callback: (list: number[]) => void) => () => Electron.IpcRenderer
+      onReceiveExpressPort: (callback: (port: number) => void) => () => Electron.IpcRenderer
     }
   }
 }

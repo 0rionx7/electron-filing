@@ -8,29 +8,29 @@ import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { selectExpressUrl, setExpressUrl, setPorts } from '@renderer/slices/backendApiSlice'
-import { useHandShakeQuery } from '@renderer/api/api'
+import { selectExpressPort, setExpressPort, setPorts } from '@renderer/slices/backendPortsSlice'
+import { useHandShakeExpressQuery } from '@renderer/api/api'
 
 function App(): React.JSX.Element {
-  const expressUrl = useAppSelector(selectExpressUrl)
-  const { data, refetch } = useHandShakeQuery(undefined)
+  const expressPort = useAppSelector(selectExpressPort)
+  const { data } = useHandShakeExpressQuery(undefined)
   const dispatch = useAppDispatch()
 
   const handleFetch = async (): Promise<void> => {
-    const response = await fetch(expressUrl)
+    const response = await fetch(`http://localhost:${expressPort}`)
     const msg = await response.json()
-    refetch()
     console.log(msg)
-    console.log(data)
   }
+  console.log(expressPort, data)
 
   useEffect(() => {
-    window.api.getExpressUrl((_event, url) => {
-      dispatch(setExpressUrl(url))
-    })
-    window.api.onReceivePortlist((_event, list) => {
-      dispatch(setPorts(list))
-    })
+    const urlUnsubscribe = window.api.onReceiveExpressPort((port) => dispatch(setExpressPort(port)))
+    const portsUnsubscribe = window.api.onReceivePortlist((list) => dispatch(setPorts(list)))
+
+    return () => {
+      urlUnsubscribe()
+      portsUnsubscribe()
+    }
   }, [dispatch])
 
   return (

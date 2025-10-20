@@ -1,6 +1,6 @@
 import express from 'express'
 
-export function startExpress(): string {
+export function startExpress(): number {
   const api = express()
 
   api.use(express.json())
@@ -26,5 +26,5 @@ export function startExpress(): string {
   })
 
   const { port } = server.address()
-  return `http://127.0.0.1:${port}`
+  return port
 }

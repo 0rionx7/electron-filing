@@ -5,8 +5,8 @@ import path from 'path'
 export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',
   SENT_FILES: 'send-files',
-  PORTS_READY: 'ports-ready',
-  GET_EXPRESS_URL: 'get-express-url'
+  GET_BACKEND_PORTS: 'get-backend-ports',
+  GET_EXPRESS_PORT: 'get-express-port'
 }
 
 type FileEntity = {
