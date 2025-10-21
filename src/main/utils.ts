@@ -6,7 +6,8 @@ export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',
   SENT_FILES: 'send-files',
   GET_BACKEND_PORTS: 'get-backend-ports',
-  GET_EXPRESS_PORT: 'get-express-port'
+  GET_EXPRESS_PORT: 'get-express-port',
+  START_DRAG: 'start-drag'
 }
 
 type FileEntity = {

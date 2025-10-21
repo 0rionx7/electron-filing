@@ -16,12 +16,13 @@ function App(): React.JSX.Element {
   const { data } = useHandShakeExpressQuery(undefined)
   const dispatch = useAppDispatch()
 
+  console.log(expressPort, data)
+
   const handleFetch = async (): Promise<void> => {
     const response = await fetch(`http://localhost:${expressPort}`)
     const msg = await response.json()
     console.log(msg)
   }
-  console.log(expressPort, data)
 
   useEffect(() => {
     const urlUnsubscribe = window.api.onReceiveExpressPort((port) => dispatch(setExpressPort(port)))

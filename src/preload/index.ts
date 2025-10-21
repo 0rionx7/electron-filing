@@ -1,7 +1,7 @@
+import { EVENTS } from './../main/utils'
 import { ApiType } from './index.d'
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { EVENTS } from '../main/utils'
 
 const api: ApiType = {
   openFolder: () => ipcRenderer.invoke(EVENTS.DIALOG_OPEN_FOLDER),
@@ -17,7 +17,8 @@ const api: ApiType = {
 
     ipcRenderer.on(EVENTS.GET_EXPRESS_PORT, handler)
     return () => ipcRenderer.off(EVENTS.GET_EXPRESS_PORT, handler)
-  }
+  },
+  startDrag: (file) => ipcRenderer.send(EVENTS.START_DRAG, file)
 }
 
 if (process.contextIsolated) {

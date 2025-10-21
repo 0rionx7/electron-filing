@@ -1,9 +1,10 @@
 import { app, shell, BrowserWindow, session } from 'electron'
 import { join } from 'path'
+
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { startExpress } from './expressApp'
 import { registerHandlers } from './ipcHandlers'
+import { startExpress } from './expressApp'
 import { EVENTS } from './utils'
 
 const reduxDevToolsPath =
