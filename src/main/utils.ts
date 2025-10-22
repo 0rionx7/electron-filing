@@ -1,6 +1,6 @@
-import { dialog } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { dialog } from 'electron'
 
 export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',

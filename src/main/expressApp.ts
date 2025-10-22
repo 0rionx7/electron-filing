@@ -1,4 +1,5 @@
 import express from 'express'
+import { AddressInfo } from 'net'
 
 export function startExpress(): number {
   const api = express()
@@ -25,6 +26,6 @@ export function startExpress(): number {
     console.log(`Example app started`)
   })
 
-  const { port } = server.address()
+  const { port } = server.address() as AddressInfo
   return port
 }

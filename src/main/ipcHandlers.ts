@@ -1,12 +1,12 @@
-import { ipcMain, app, nativeImage } from 'electron'
 import path from 'path'
 import fs from 'fs'
+import { ipcMain, app, nativeImage } from 'electron'
 
 import { EVENTS, handleFolderSelection } from './utils'
 
-const iconPath = path.join(app.getAppPath(), 'resources', 'drag-and-drop.png')
-const base64 = fs.readFileSync(iconPath, { encoding: 'base64' })
-const icon = nativeImage.createFromDataURL(`data:image/png;base64,${base64}`)
+const ICON_PATH = path.join(app.getAppPath(), 'resources', 'drag-and-drop.png')
+const base64Icon = fs.readFileSync(ICON_PATH, { encoding: 'base64' })
+const icon = nativeImage.createFromDataURL(`data:image/png;base64,${base64Icon}`)
 
 export function registerHandlers(): void {
   ipcMain.handle(EVENTS.DIALOG_OPEN_FOLDER, async () => {

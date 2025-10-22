@@ -1,13 +1,13 @@
-import { app, shell, BrowserWindow, session, Menu } from 'electron'
 import { join } from 'path'
-
+import { app, shell, BrowserWindow, session, Menu } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+
 import icon from '../../resources/icon.png?asset'
 import { registerHandlers } from './ipcHandlers'
 import { startExpress } from './expressApp'
 import { EVENTS } from './utils'
 
-const reduxDevToolsPath =
+const REDUX_DEV_TOOLS_PATH =
   'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd\\3.2.10_0'
 
 let expressPort: number
@@ -105,7 +105,7 @@ app.whenReady().then(async () => {
     })
   })
 
-  await session.defaultSession.extensions.loadExtension(reduxDevToolsPath, {
+  await session.defaultSession.extensions.loadExtension(REDUX_DEV_TOOLS_PATH, {
     allowFileAccess: true
   })
 

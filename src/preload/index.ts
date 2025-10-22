@@ -1,25 +1,25 @@
-import { EVENTS } from './../main/utils'
-import { ApiType } from './index.d'
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-const api: ApiType = {
+import { EVENTS } from './../main/utils'
+
+const api = {
   openFolder: () => ipcRenderer.invoke(EVENTS.DIALOG_OPEN_FOLDER),
-  sendFiles: (files) => ipcRenderer.invoke(EVENTS.SENT_FILES, files),
-  onReceivePortlist: (callback) => {
+  sendFiles: (files: string[]) => ipcRenderer.invoke(EVENTS.SENT_FILES, files),
+  onReceivePortlist: (callback: (list: number[]) => void) => {
     const handler = (_event: Electron.IpcRendererEvent, list: number[]): void => callback(list)
 
     ipcRenderer.on(EVENTS.GET_BACKEND_PORTS, handler)
     return () => ipcRenderer.off(EVENTS.GET_BACKEND_PORTS, handler)
   },
-  onReceiveExpressPort: (callback) => {
+  onReceiveExpressPort: (callback: (port: number) => void) => {
     const handler = (_event: Electron.IpcRendererEvent, port: number): void => callback(port)
 
     ipcRenderer.on(EVENTS.GET_EXPRESS_PORT, handler)
     return () => ipcRenderer.off(EVENTS.GET_EXPRESS_PORT, handler)
   },
-  startDrag: (file) => ipcRenderer.send(EVENTS.START_DRAG, file),
-  gotoStep: (callBack) => {
+  startDrag: (file: string) => ipcRenderer.send(EVENTS.START_DRAG, file),
+  gotoStep: (callBack: (step: number) => void) => {
     const handler = (_event: Electron.IpcRendererEvent, step: number): void => callBack(step)
 
     ipcRenderer.on(EVENTS.GOTO_STEP, handler)
