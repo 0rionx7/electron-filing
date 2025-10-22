@@ -7,7 +7,8 @@ export const EVENTS = {
   SENT_FILES: 'send-files',
   GET_BACKEND_PORTS: 'get-backend-ports',
   GET_EXPRESS_PORT: 'get-express-port',
-  START_DRAG: 'start-drag'
+  START_DRAG: 'start-drag',
+  GOTO_STEP: 'goto-step'
 }
 
 type FileEntity = {

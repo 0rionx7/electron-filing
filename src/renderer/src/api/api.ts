@@ -8,7 +8,11 @@ import {
 } from '@reduxjs/toolkit/query/react'
 import { RootState } from '@renderer/app/store'
 
-const delay = (ms: number): Promise<unknown> => new Promise((resolve) => setTimeout(resolve, ms))
+const delay = async (ms: number): Promise<unknown> => {
+  const { promise, resolve } = Promise.withResolvers()
+  setTimeout(resolve, ms)
+  return promise
+}
 
 const getBaseQuery = (
   port: number

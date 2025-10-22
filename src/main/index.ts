@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, session } from 'electron'
+import { app, shell, BrowserWindow, session, Menu } from 'electron'
 import { join } from 'path'
 
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -17,13 +17,49 @@ function createWindow(): void {
     width: 1300,
     height: 900,
     show: false,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
+
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'Choose Step',
+      submenu: [
+        {
+          click: () => mainWindow.webContents.send('goto-step', 1),
+          label: 'AccountDetails'
+        },
+        {
+          click: () => mainWindow.webContents.send('goto-step', 2),
+          label: 'PersonalInfo'
+        },
+        {
+          click: () => mainWindow.webContents.send('goto-step', 3),
+          label: 'ChooseFolder'
+        },
+        {
+          click: () => mainWindow.webContents.send('goto-step', 4),
+          label: 'ChooseFiles'
+        }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { type: 'separator' },
+        { role: 'toggleDevTools' },
+        { role: 'togglefullscreen' }
+      ]
+    }
+  ])
+
+  Menu.setApplicationMenu(menu)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

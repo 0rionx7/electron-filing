@@ -1,17 +1,10 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import { reset, selectEntity1, setStep } from '@renderer/slices/registerSlice'
-import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { Button } from '@renderer/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
+import { selectEntity1 } from '@renderer/slices/registerSlice'
+import { useAppSelector } from '@renderer/app/hooks'
 import { Item } from '@renderer/components/ui/item'
 
 const Success = (): React.JSX.Element => {
   const entity1 = useAppSelector(selectEntity1)
-  const dispatch = useAppDispatch()
-
-  const handleBack = (): void => {
-    dispatch(setStep(1))
-    dispatch(reset())
-  }
 
   const handleDragFile = (event: React.DragEvent<HTMLDivElement>, entity: string): void => {
     event.preventDefault()
@@ -34,9 +27,6 @@ const Success = (): React.JSX.Element => {
           {entity.split('\\').pop()}
         </Item>
       ))}
-      <CardFooter className="justify-center">
-        <Button onClick={handleBack}>Back</Button>
-      </CardFooter>
     </Card>
   )
 }

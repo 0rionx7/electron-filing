@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { selectExpressPort, setExpressPort, setPorts } from '@renderer/slices/backendPortsSlice'
 import AccountDetails from '@renderer/components/AccountDetails'
 import { SelectFiles } from '@renderer/components/SelectFiles'
 import SelectFolder from '@renderer/components/SelectFolder'
@@ -8,12 +9,14 @@ import Success from '@renderer/components/Success'
 import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { selectExpressPort, setExpressPort, setPorts } from '@renderer/slices/backendPortsSlice'
 import { useHandShakeExpressQuery } from '@renderer/api/api'
+import useGotoStep from '@renderer/hooks/useGotoStep'
+import StepAlert from '@renderer/components/StepAlert'
 
 function App(): React.JSX.Element {
   const expressPort = useAppSelector(selectExpressPort)
   const { data } = useHandShakeExpressQuery(undefined)
+  const { openAlert, setOpenAlert } = useGotoStep()
   const dispatch = useAppDispatch()
 
   console.log(expressPort, data)
@@ -36,6 +39,7 @@ function App(): React.JSX.Element {
 
   return (
     <Stepper>
+      <StepAlert isOpen={openAlert} setOpenAlert={setOpenAlert} />
       <Button onClick={handleFetch} className="mb-1 bg-teal-400 hover:bg-teal-600">
         HandShake
       </Button>

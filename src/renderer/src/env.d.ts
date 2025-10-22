@@ -12,6 +12,7 @@ declare global {
       sendFiles: (data) => Promise<never>
       onReceivePortlist: (callback: (list: number[]) => void) => () => Electron.IpcRenderer
       onReceiveExpressPort: (callback: (port: number) => void) => () => Electron.IpcRenderer
+      gotoStep: (callback: (step: number) => void) => () => Electron.IpcRenderer
       startDrag: (file: string) => void
     }
   }

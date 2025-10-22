@@ -18,7 +18,13 @@ const api: ApiType = {
     ipcRenderer.on(EVENTS.GET_EXPRESS_PORT, handler)
     return () => ipcRenderer.off(EVENTS.GET_EXPRESS_PORT, handler)
   },
-  startDrag: (file) => ipcRenderer.send(EVENTS.START_DRAG, file)
+  startDrag: (file) => ipcRenderer.send(EVENTS.START_DRAG, file),
+  gotoStep: (callBack) => {
+    const handler = (_event: Electron.IpcRendererEvent, step: number): void => callBack(step)
+
+    ipcRenderer.on(EVENTS.GOTO_STEP, handler)
+    return () => ipcRenderer.off(EVENTS.GOTO_STEP, handler)
+  }
 }
 
 if (process.contextIsolated) {
