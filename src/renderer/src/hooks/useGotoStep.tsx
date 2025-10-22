@@ -23,10 +23,11 @@ const useGotoStep = (): { openAlert: boolean; setOpenAlert: Dispatch<SetStateAct
       const firstStepCompleted = isStepCompleted(firstStepData)
       const secondStepCompleted = isStepCompleted(secondStepData)
       const infosCompleted = firstStepCompleted && secondStepCompleted
+
       const shouldOpenDialog =
         (step === 2 && !firstStepCompleted) ||
         (step == 3 && !infosCompleted) ||
-        (step === 4 && !infosCompleted && !rootDirectory)
+        (step === 4 && (!infosCompleted || !rootDirectory))
       if (shouldOpenDialog) return setOpenAlert(true)
       dispatch(setStep(step))
     })
