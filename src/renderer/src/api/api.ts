@@ -6,6 +6,7 @@ import {
   FetchBaseQueryError,
   QueryReturnValue
 } from '@reduxjs/toolkit/query/react'
+
 import { RootState } from '@renderer/app/store'
 
 const delay = async (ms: number): Promise<unknown> => {

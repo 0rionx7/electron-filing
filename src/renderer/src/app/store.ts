@@ -1,6 +1,7 @@
 import type { Action, ThunkAction } from '@reduxjs/toolkit'
 import { combineSlices, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
+
 import { appApi } from '@renderer/api/api'
 import { backendPortsSlice } from '@renderer/slices/backendPortsSlice'
 import { registerSlice } from '@renderer/slices/registerSlice'

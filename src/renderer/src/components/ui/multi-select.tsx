@@ -1,3 +1,6 @@
+import { useMemo, useState } from 'react'
+import { X } from 'lucide-react'
+
 import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover'
 import {
   Command,
@@ -9,9 +12,7 @@ import {
 } from '@renderer/components/ui/command'
 import { Button } from '@renderer/components/ui/button'
 import { Checkbox } from '@renderer/components/ui/checkbox'
-import { X } from 'lucide-react'
 import { cn } from '@renderer/lib/utils'
-import { useMemo, useState } from 'react'
 
 export type MultiOption = { value: string; label: string; disabled?: boolean }
 

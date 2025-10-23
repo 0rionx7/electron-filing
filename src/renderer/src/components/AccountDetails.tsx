@@ -1,9 +1,9 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Input } from '@renderer/components/ui/input'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { AccountDetailsSchema, AccountDetailsType } from '@renderer/lib/schema'
 import { selectFirstStepData, setStep, updateFirstStepData } from '@renderer/slices/registerSlice'
 import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
