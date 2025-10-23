@@ -1,4 +1,4 @@
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Input } from '@renderer/components/ui/input'
@@ -6,15 +6,15 @@ import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { AccountDetailsSchema, AccountDetailsType } from '@renderer/lib/schema'
 import { selectFirstStepData, setStep, updateFirstStepData } from '@renderer/slices/registerSlice'
-import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@renderer/components/ui/form'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
+import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
+
+const fieldLabelClass = `
+  absolute left-3.5 -top-[70%] font-medium
+  peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
+  peer-placeholder-shown:top-[20%] peer-placeholder-shown:font-[350]
+  transition-all duration-300 ease-in-out
+`
 
 export default function AccountDetails(): React.JSX.Element {
   const data = useAppSelector(selectFirstStepData)
@@ -38,57 +38,84 @@ export default function AccountDetails(): React.JSX.Element {
         <CardTitle className="text-gray-600">Provide your account details</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              data-cy="submit"
-              className="rounded-xl px-4 py-2 shadow bg-black text-white"
-            >
-              Submit
-            </Button>
-          </form>
-        </Form>
+        <form id="details-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
+          <Controller
+            name="username"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="relative mt-3">
+                <Input
+                  {...field}
+                  id="details-form-username"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="username"
+                  autoComplete="off"
+                  className="peer placeholder-transparent!"
+                />
+                <FieldLabel htmlFor="details-form-username" className={fieldLabelClass}>
+                  Username
+                </FieldLabel>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          <Controller
+            name="password"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="relative">
+                <Input
+                  {...field}
+                  id="details-form-password"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="password"
+                  autoComplete="off"
+                  className="peer placeholder-transparent!"
+                />
+                <FieldLabel htmlFor="details-form-password" className={fieldLabelClass}>
+                  Password
+                </FieldLabel>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          <Controller
+            name="confirmPassword"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="relative">
+                <Input
+                  {...field}
+                  id="details-form-confirmPassword"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="confirmPassword"
+                  autoComplete="off"
+                  className="peer placeholder-transparent!"
+                />
+                <FieldLabel htmlFor="details-form-confirmPassword" className={fieldLabelClass}>
+                  Confirm Password
+                </FieldLabel>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+        </form>
       </CardContent>
+      <CardFooter>
+        <Field orientation="horizontal">
+          <Button type="button" variant="outline" onClick={() => form.reset()}>
+            Reset
+          </Button>
+          <Button
+            type="submit"
+            form="details-form"
+            data-cy="submit"
+            className="rounded-xl px-4 py-2 shadow bg-black text-white"
+          >
+            Submit
+          </Button>
+        </Field>
+      </CardFooter>
     </Card>
   )
 }
