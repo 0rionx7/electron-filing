@@ -1,8 +1,8 @@
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 
 import { Button } from '@renderer/components/ui/button'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
+import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@renderer/components/ui/card'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import {
   selectEntity1,
@@ -11,15 +11,8 @@ import {
   selectRootDirectory,
   setStep
 } from '@renderer/slices/registerSlice'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@renderer/components/ui/form'
 import FilteredMultiSelect from '@renderer/components/FilteredMultiSelect'
+import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
 
 export type FilesSelection = {
   entity1: string[]
@@ -48,47 +41,63 @@ export function SelectFiles(): React.JSX.Element | null {
         <CardTitle className="text-gray-600">Select your files</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
-            <FormField
-              control={form.control}
-              name="entity1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>List 1</FormLabel>
-                  <FormControl>
-                    <FilteredMultiSelect name="entity1" options={fileList} field={field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="entity2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>List 2</FormLabel>
-                  <FormControl>
-                    <FilteredMultiSelect name="entity2" options={fileList} field={field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="button"
-              onClick={() => {
-                dispatch(setStep(3))
-              }}
-              className="mr-4 mb-0"
-            >
-              Back
-            </Button>
-            {(entity1.length > 0 || entity2.length > 0) && <Button type="submit">Select</Button>}
-          </form>
-        </Form>
+        <form id="files-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
+          <Controller
+            name="entity1"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="relative mt-3">
+                <FieldLabel htmlFor="files-form-entity1">List 1</FieldLabel>
+                <FilteredMultiSelect
+                  watch={form.watch}
+                  name="entity1"
+                  options={fileList}
+                  field={field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          <Controller
+            name="entity2"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="relative mt-3">
+                <FieldLabel htmlFor="files-form-entity2">List 1</FieldLabel>
+                <FilteredMultiSelect
+                  watch={form.watch}
+                  name="entity2"
+                  options={fileList}
+                  field={field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+        </form>
       </CardContent>
+      <CardFooter>
+        <Field orientation="horizontal">
+          <Button
+            type="button"
+            onClick={() => {
+              dispatch(setStep(3))
+            }}
+            className="bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-xl px-4 py-2"
+          >
+            Back
+          </Button>
+          {(entity1.length > 0 || entity2.length > 0) && (
+            <Button
+              type="submit"
+              form="files-form"
+              className="bg-green-600 text-white hover:bg-neutral-800 shadow rounded-xl px-4 py-2"
+            >
+              Select
+            </Button>
+          )}
+        </Field>
+      </CardFooter>
     </Card>
   )
 }

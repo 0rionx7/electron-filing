@@ -106,6 +106,7 @@ export default function AccountDetails(): React.JSX.Element {
           <Button
             type="button"
             variant="outline"
+            className="border border-gray-400 text-gray-700 hover:bg-gray-100 rounded-xl px-4 py-2"
             onClick={() =>
               form.reset({
                 username: '',
@@ -120,7 +121,7 @@ export default function AccountDetails(): React.JSX.Element {
             type="submit"
             form="details-form"
             data-cy="submit"
-            className="rounded-xl px-4 py-2 shadow bg-black text-white"
+            className="bg-black text-white hover:bg-neutral-800 shadow rounded-xl px-4 py-2"
           >
             Submit
           </Button>
