@@ -9,7 +9,7 @@ import { selectFirstStepData, setStep, updateFirstStepData } from '@renderer/sli
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
 
-const fieldLabelClass = `
+export const fieldLabelClass = `
   absolute left-3.5 -top-[70%] font-medium
   peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500
   peer-placeholder-shown:top-[20%] peer-placeholder-shown:font-[350]
@@ -103,7 +103,17 @@ export default function AccountDetails(): React.JSX.Element {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() =>
+              form.reset({
+                username: '',
+                password: '',
+                confirmPassword: ''
+              })
+            }
+          >
             Reset
           </Button>
           <Button
