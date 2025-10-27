@@ -20,7 +20,14 @@ const DatePicker = ({ field, fieldState, label }: DatePickerProps): React.JSX.El
   const [open, setOpen] = useState(false)
 
   return (
-    <Field data-invalid={fieldState.invalid} className="relative mt-3">
+    <Field
+      data-invalid={fieldState.invalid}
+      className="group relative mt-3"
+      aria-invalid={fieldState.invalid}
+    >
+      <FieldLabel htmlFor="infos-form-lastName" className={fieldLabelClass}>
+        {label}
+      </FieldLabel>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -47,9 +54,6 @@ const DatePicker = ({ field, fieldState, label }: DatePickerProps): React.JSX.El
           />
         </PopoverContent>
       </Popover>
-      <FieldLabel htmlFor="infos-form-lastName" className={fieldLabelClass}>
-        {label}
-      </FieldLabel>
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
     </Field>
   )

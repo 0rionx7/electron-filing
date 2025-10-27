@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Input } from '@renderer/components/ui/input'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Country, PersonalInfoSchema, PersonalInfoType } from '@renderer/lib/schema'
@@ -23,6 +22,7 @@ import {
 import DatePicker from '@renderer/components/DatePicker'
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
 import { fieldLabelClass } from '@renderer/components/AccountDetails'
+import InputField from '@renderer/components/InputField'
 
 const countries: Country[] = ['Greece', 'Cyprus', 'Italy', 'Spain']
 
@@ -56,52 +56,14 @@ export default function PersonalInfo(): React.JSX.Element {
   }
 
   return (
-    <Card className="w-full bg-stone-300">
+    <Card className="w-md bg-stone-300">
       <CardHeader>
-        <CardTitle className="text-gray-600">Provide your personal info</CardTitle>
+        <CardTitle className="text-gray-600  mb-4 ml-3">Provide your personal info</CardTitle>
       </CardHeader>
       <CardContent>
         <form id="infos-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
-          <Controller
-            name="firstName"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="relative mt-3">
-                <Input
-                  {...field}
-                  id="infos-form-firstName"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="firstName"
-                  autoComplete="off"
-                  className="peer placeholder-transparent!"
-                />
-                <FieldLabel htmlFor="infos-form-firstName" className={fieldLabelClass}>
-                  FirstName
-                </FieldLabel>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-          <Controller
-            name="lastName"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="relative mt-3">
-                <Input
-                  {...field}
-                  id="infos-form-lastName"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="lastName"
-                  autoComplete="off"
-                  className="peer placeholder-transparent!"
-                />
-                <FieldLabel htmlFor="infos-form-lastName" className={fieldLabelClass}>
-                  LastName
-                </FieldLabel>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
+          <InputField name="firstName" form={form} />
+          <InputField name="lastName" form={form} />
           <Controller
             name="dateOfBirth"
             control={form.control}
@@ -113,12 +75,15 @@ export default function PersonalInfo(): React.JSX.Element {
             name="country"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="relative mt-3">
+              <Field data-invalid={fieldState.invalid} className="group relative mt-3">
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <FieldLabel htmlFor="infos-form-country" className={fieldLabelClass}>
+                      Country
+                    </FieldLabel>
                     {countries.map((country) => (
                       <SelectItem key={country} value={country}>
                         {country}
@@ -126,9 +91,6 @@ export default function PersonalInfo(): React.JSX.Element {
                     ))}
                   </SelectContent>
                 </Select>
-                <FieldLabel htmlFor="infos-form-country" className={fieldLabelClass}>
-                  Country
-                </FieldLabel>
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

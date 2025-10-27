@@ -25,27 +25,20 @@ function createWindow(): void {
     }
   })
 
+  const menuItems = [
+    { step: 1, label: 'AccountDetails' },
+    { step: 2, label: 'PersonalInfo' },
+    { step: 3, label: 'ChooseFolder' },
+    { step: 4, label: 'ChooseFiles' }
+  ]
+  const createMenuItem = ({ step, label }): { click: () => void; label: string } => ({
+    click: () => mainWindow.webContents.send('goto-step', step),
+    label
+  })
   const menu = Menu.buildFromTemplate([
     {
       label: 'Choose Step',
-      submenu: [
-        {
-          click: () => mainWindow.webContents.send('goto-step', 1),
-          label: 'AccountDetails'
-        },
-        {
-          click: () => mainWindow.webContents.send('goto-step', 2),
-          label: 'PersonalInfo'
-        },
-        {
-          click: () => mainWindow.webContents.send('goto-step', 3),
-          label: 'ChooseFolder'
-        },
-        {
-          click: () => mainWindow.webContents.send('goto-step', 4),
-          label: 'ChooseFiles'
-        }
-      ]
+      submenu: menuItems.map(createMenuItem)
     },
     {
       label: 'View',

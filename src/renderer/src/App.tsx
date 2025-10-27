@@ -38,27 +38,29 @@ function App(): React.JSX.Element {
   }, [dispatch])
 
   return (
-    <Stepper>
-      <StepAlert isOpen={openAlert} setOpenAlert={setOpenAlert} />
-      <Button onClick={handleFetch} className="mb-1 bg-teal-400 hover:bg-teal-600">
-        HandShake
+    <>
+      <Stepper>
+        <StepAlert isOpen={openAlert} setOpenAlert={setOpenAlert} />
+        <Step when={1}>
+          <AccountDetails />
+        </Step>
+        <Step when={2}>
+          <PersonalInfo />
+        </Step>
+        <Step when={3}>
+          <SelectFolder />
+        </Step>
+        <Step when={4}>
+          <SelectFiles />
+        </Step>
+        <Step when={5}>
+          <Success />
+        </Step>
+      </Stepper>
+      <Button onClick={handleFetch} className="mt-5 bg-teal-400 hover:bg-teal-600">
+        HandShake Express
       </Button>
-      <Step when={1}>
-        <AccountDetails />
-      </Step>
-      <Step when={2}>
-        <PersonalInfo />
-      </Step>
-      <Step when={3}>
-        <SelectFolder />
-      </Step>
-      <Step when={4}>
-        <SelectFiles />
-      </Step>
-      <Step when={5}>
-        <Success />
-      </Step>
-    </Stepper>
+    </>
   )
 }
 

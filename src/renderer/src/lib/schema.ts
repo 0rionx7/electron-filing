@@ -20,7 +20,22 @@ export const AccountDetailsSchema = z
     }
   })
 
-export const PersonalInfoSchema = (username: string) =>
+export const PersonalInfoSchema = (
+  username: string
+): z.ZodObject<
+  {
+    firstName: z.ZodString
+    lastName: z.ZodString
+    dateOfBirth: z.ZodDate
+    country: z.ZodEnum<{
+      Greece: 'Greece'
+      Cyprus: 'Cyprus'
+      Italy: 'Italy'
+      Spain: 'Spain'
+    }>
+  },
+  z.core.$strip
+> =>
   z
     .object({
       firstName: z.string(),
