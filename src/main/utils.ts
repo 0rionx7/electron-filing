@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { dialog } from 'electron'
+import { dialog, ipcMain, IpcMainInvokeEvent } from 'electron'
 
 export const EVENTS = {
   DIALOG_OPEN_FOLDER: 'dialog:openFolder',
@@ -10,6 +10,8 @@ export const EVENTS = {
   START_DRAG: 'start-drag',
   GOTO_STEP: 'goto-step'
 }
+
+const ALLOWED_ORIGINS = ['http://localhost:5173/', 'http://localhost:5174/']
 
 type FileEntity = {
   label: string
@@ -40,4 +42,31 @@ export async function handleFolderSelection(): Promise<{
   }
 
   return { rootDirectory: rootPath, fileEntities }
+}
+
+function validateSender(event: IpcMainInvokeEvent): void {
+  const url = event.senderFrame?.url ?? ''
+  const isAllowed = ALLOWED_ORIGINS.some((allowedUrl) => allowedUrl.startsWith(url))
+
+  if (!isAllowed) throw new Error(`Blocked IPC call from unauthorized origin: ${url}`)
+}
+
+export function secureHandle<T = unknown>(
+  channel: string,
+  handler: (event: IpcMainInvokeEvent, ...args: T[]) => void
+): void {
+  ipcMain.handle(channel, (event, ...args) => {
+    validateSender(event)
+    return handler(event, ...args)
+  })
+}
+
+export function secureOn<T = unknown>(
+  channel: string,
+  handler: (event: IpcMainInvokeEvent, ...args: T[]) => void
+): void {
+  ipcMain.on(channel, (event, ...args) => {
+    validateSender(event)
+    return handler(event, ...args)
+  })
 }
