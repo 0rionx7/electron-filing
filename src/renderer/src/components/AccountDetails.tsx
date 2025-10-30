@@ -10,11 +10,11 @@ import { Field } from '@renderer/components/ui/field'
 import InputField from '@renderer/components/InputField'
 
 export const fieldLabelClass = `
-  absolute left-3 -top-[1.5rem] font-medium capitalize
+  absolute left-3 -top-6 font-medium capitalize
   group-has-[input:placeholder-shown]:text-base
   group-has-[input:placeholder-shown]:text-gray-500
-  group-has-[input:placeholder-shown]:top-[0.4rem]
-  group-has-[input:placeholder-shown]:font-[350]
+  group-has-[input:placeholder-shown]:top-1.5
+  group-has-[input:placeholder-shown]:font-light
   group-data-[invalid=true]:!text-destructive
   transition-[top,font-size,font-weight] duration-300 ease-in-out
 `

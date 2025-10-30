@@ -1,11 +1,11 @@
 import path from 'path'
-import fs from 'fs'
-import { app, nativeImage } from 'electron'
+import { promises as fs } from 'fs'
+import { app, nativeImage, dialog } from 'electron'
 
-import { EVENTS, handleFolderSelection, secureHandle, secureOn } from './utils'
+import { EVENTS, FileEntity, secureHandle, secureOn } from './utils'
 
 const ICON_PATH = path.join(app.getAppPath(), 'resources', 'drag-and-drop.png')
-const base64Icon = fs.readFileSync(ICON_PATH, { encoding: 'base64' })
+const base64Icon = await fs.readFile(ICON_PATH, { encoding: 'base64' })
 const icon = nativeImage.createFromDataURL(`data:image/png;base64,${base64Icon}`)
 
 export function registerHandlers(): void {
@@ -19,4 +19,30 @@ export function registerHandlers(): void {
   secureOn<string>(EVENTS.START_DRAG, (event, file) => {
     event.sender.startDrag({ file, icon })
   })
+}
+
+async function handleFolderSelection(): Promise<{
+  rootDirectory: string
+  fileEntities: FileEntity[]
+}> {
+  const DEPTH = 5
+  const { filePaths } = await dialog.showOpenDialog({
+    properties: ['openDirectory']
+  })
+  const rootPath = filePaths[0]
+  const fileEntities: FileEntity[] = []
+
+  await findFileEntities(1, rootPath)
+
+  async function findFileEntities(level: number, folderPath: string): Promise<void> {
+    const items = await fs.readdir(folderPath, { withFileTypes: true })
+
+    for (const item of items) {
+      const filePath = path.join(item.parentPath, item.name)
+      if (item.isFile()) fileEntities.push({ label: item.name, value: filePath })
+      else if (level < DEPTH) await findFileEntities(level + 1, filePath)
+    }
+  }
+
+  return { rootDirectory: rootPath, fileEntities }
 }
