@@ -35,7 +35,7 @@ const dynamicInjectedPortsBaseQuery: BaseQueryFn<
     if (port) {
       return getBaseQuery(port)(args, api, extraOptions)
     } else if (retriesCount < 5) {
-      await delay(700)
+      await delay(3000)
       return atemptFetch(retriesCount + 1)
     }
     return getBaseQuery(3000)(args, api, extraOptions)

@@ -1,6 +1,7 @@
 import { join } from 'path'
 import { app, shell, BrowserWindow, session, Menu } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { setTimeout } from 'timers/promises'
 
 import icon from '../../resources/icon.png?asset'
 import { registerHandlers } from './ipcHandlers'
@@ -54,12 +55,11 @@ function createWindow(): void {
 
   Menu.setApplicationMenu(menu)
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.on('ready-to-show', async () => {
     mainWindow.show()
-    setTimeout(() => {
-      mainWindow.webContents.send(EVENTS.GET_EXPRESS_PORT, expressPort)
-      mainWindow.webContents.send(EVENTS.GET_BACKEND_PORTS, [1, 2, 3])
-    }, 2000)
+    await setTimeout(4000)
+    mainWindow.webContents.send(EVENTS.GET_EXPRESS_PORT, expressPort)
+    mainWindow.webContents.send(EVENTS.GET_BACKEND_PORTS, [1, 2, 3])
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
