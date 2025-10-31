@@ -1,8 +1,14 @@
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Button } from '@renderer/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import { selectRootDirectory, setFileList, setRootDirectory, setStep } from '@renderer/slice/slice'
+import {
+  selectRootDirectory,
+  setFileList,
+  setRootDirectory,
+  setStep
+} from '@renderer/slices/registerSlice'
 import { toast } from 'sonner'
+import { Field } from '@renderer/components/ui/field'
 
 const SelectFolder = (): React.JSX.Element | null => {
   const rootDirectory = useAppSelector(selectRootDirectory)
@@ -23,17 +29,39 @@ const SelectFolder = (): React.JSX.Element | null => {
       })
     }
   }
+
   return (
     <Card className="w-lg bg-stone-300">
       <CardHeader>
         <CardTitle>Please select a folder</CardTitle>
       </CardHeader>
       <CardContent className="space-x-1">
-        <Button onClick={handleSelect}>Select</Button>
-        <Button onClick={() => dispatch(setStep(2))}>Back</Button>
-        {rootDirectory && <Button onClick={() => dispatch(setStep(4))}>Proceed</Button>}
+        {rootDirectory && `Selected: ${rootDirectory}`}
       </CardContent>
-      <CardFooter>{rootDirectory && `Selected: ${rootDirectory}`}</CardFooter>
+      <CardFooter>
+        <Field orientation="horizontal">
+          <Button
+            onClick={() => dispatch(setStep(2))}
+            className="bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-xl px-4 py-2"
+          >
+            Back
+          </Button>
+          <Button
+            onClick={handleSelect}
+            className="bg-green-600 text-white hover:bg-neutral-800 shadow rounded-xl px-4 py-2"
+          >
+            Select
+          </Button>
+          {rootDirectory && (
+            <Button
+              onClick={() => dispatch(setStep(4))}
+              className="bg-black text-white hover:bg-neutral-800 shadow rounded-xl px-4 py-2"
+            >
+              Proceed
+            </Button>
+          )}
+        </Field>
+      </CardFooter>
     </Card>
   )
 }

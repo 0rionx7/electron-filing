@@ -1,34 +1,44 @@
-import { promises as fs } from 'fs'
-import { dialog } from 'electron'
+import { ipcMain, IpcMainInvokeEvent } from 'electron'
 
-type FileEntity = {
+export const EVENTS = {
+  DIALOG_OPEN_FOLDER: 'dialog:openFolder',
+  SENT_FILES: 'send-files',
+  GET_BACKEND_PORTS: 'get-backend-ports',
+  GET_EXPRESS_PORT: 'get-express-port',
+  START_DRAG: 'start-drag',
+  GOTO_STEP: 'goto-step'
+}
+
+const ALLOWED_ORIGINS = ['http://localhost:5173/', 'http://localhost:5174/']
+
+export type FileEntity = {
   label: string
   value: string
 }
 
-const DEPTH = 5
+function validateSender(event: IpcMainInvokeEvent): void {
+  const url = event.senderFrame?.url ?? ''
+  const isAllowed = ALLOWED_ORIGINS.some((allowedUrl) => allowedUrl.startsWith(url))
 
-export async function handleFolderSelection(): Promise<{
-  rootDirectory: string
-  fileEntities: FileEntity[]
-}> {
-  const { filePaths } = await dialog.showOpenDialog({
-    properties: ['openDirectory']
+  if (!isAllowed) throw new Error(`Blocked IPC call from unauthorized origin: ${url}`)
+}
+
+export function secureHandle<T = unknown>(
+  channel: string,
+  handler: (event: IpcMainInvokeEvent, ...args: T[]) => void
+): void {
+  ipcMain.handle(channel, (event, ...args) => {
+    validateSender(event)
+    return handler(event, ...args)
   })
-  const rootPath = filePaths[0]
-  const fileEntities: FileEntity[] = []
+}
 
-  await findFileEntities(1, rootPath)
-
-  async function findFileEntities(level: number, folderPath: string): Promise<void> {
-    const items = await fs.readdir(folderPath, { withFileTypes: true })
-
-    for (const item of items) {
-      const path = `${item.parentPath}\\${item.name}`
-      if (item.isFile()) fileEntities.push({ label: item.name, value: path })
-      else if (level < DEPTH) await findFileEntities(level + 1, path)
-    }
-  }
-
-  return { rootDirectory: rootPath, fileEntities }
+export function secureOn<T = unknown>(
+  channel: string,
+  handler: (event: IpcMainInvokeEvent, ...args: T[]) => void
+): void {
+  ipcMain.on(channel, (event, ...args) => {
+    validateSender(event)
+    return handler(event, ...args)
+  })
 }

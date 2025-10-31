@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Input } from '@renderer/components/ui/input'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Country, PersonalInfoSchema, PersonalInfoType } from '@renderer/lib/schema'
@@ -11,16 +10,8 @@ import {
   selectSecondStepData,
   setStep,
   updateSecondStepData
-} from '@renderer/slice/slice'
-import { Card, CardContent, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@renderer/components/ui/form'
+} from '@renderer/slices/registerSlice'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -29,6 +20,9 @@ import {
   SelectValue
 } from '@renderer/components/ui/select'
 import DatePicker from '@renderer/components/DatePicker'
+import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
+import { fieldLabelClass } from '@renderer/components/AccountDetails'
+import InputField from '@renderer/components/InputField'
 
 const countries: Country[] = ['Greece', 'Cyprus', 'Italy', 'Spain']
 
@@ -62,81 +56,67 @@ export default function PersonalInfo(): React.JSX.Element {
   }
 
   return (
-    <Card className="w-full bg-stone-300">
+    <Card className="w-md bg-stone-300">
       <CardHeader>
-        <CardTitle className="text-gray-600">Provide your personal info</CardTitle>
+        <CardTitle className="text-gray-600  mb-4 ml-3">Provide your personal info</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>FirstName</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>LastName</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dateOfBirth"
-              render={({ field }) => <DatePicker field={field} />}
-            />
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {countries.map((country) => (
-                        <SelectItem key={country} value={country}>
-                          {country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="button"
-              className="mr-1"
-              onClick={() => {
-                dispatch(setStep(1))
-              }}
-            >
-              Back
-            </Button>
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
+        <form id="infos-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
+          <InputField name="firstName" form={form} />
+          <InputField name="lastName" form={form} />
+          <Controller
+            name="dateOfBirth"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <DatePicker field={field} fieldState={fieldState} label="Date of birth" />
+            )}
+          />
+          <Controller
+            name="country"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="group relative mt-3">
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <FieldLabel htmlFor="infos-form-country" className={fieldLabelClass}>
+                      Country
+                    </FieldLabel>
+                    {countries.map((country) => (
+                      <SelectItem key={country} value={country}>
+                        {country}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+        </form>
       </CardContent>
+      <CardFooter>
+        <Field orientation="horizontal">
+          <Button
+            type="button"
+            className="bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-xl px-4 py-2"
+            onClick={() => {
+              dispatch(setStep(1))
+            }}
+          >
+            Back
+          </Button>
+          <Button
+            form="infos-form"
+            type="submit"
+            className="bg-black text-white hover:bg-neutral-800 shadow rounded-xl px-4 py-2"
+          >
+            Submit
+          </Button>
+        </Field>
+      </CardFooter>
     </Card>
   )
 }

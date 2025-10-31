@@ -1,21 +1,24 @@
-import { app, shell, BrowserWindow, ipcMain, session } from 'electron'
 import { join } from 'path'
+import { app, shell, BrowserWindow, session, Menu } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-import { handleFolderSelection } from './utils'
+import { setTimeout } from 'timers/promises'
 
-const reduxDevToolsPath =
+import icon from '../../resources/icon.png?asset'
+import { registerHandlers } from './ipcHandlers'
+import { startExpress } from './expressApp'
+import { EVENTS } from './utils'
+
+const REDUX_DEV_TOOLS_PATH =
   'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd\\3.2.10_0'
-const reactDevToolsPath =
-  'C:\\Users\\orionx7\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\7.0.0_0'
+
+let expressPort: number
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1100,
+    width: 1300,
     height: 900,
     show: false,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -23,8 +26,40 @@ function createWindow(): void {
     }
   })
 
-  mainWindow.on('ready-to-show', () => {
+  const menuItems = [
+    { step: 1, label: 'AccountDetails' },
+    { step: 2, label: 'PersonalInfo' },
+    { step: 3, label: 'ChooseFolder' },
+    { step: 4, label: 'ChooseFiles' }
+  ]
+  const createMenuItem = ({ step, label }): { click: () => void; label: string } => ({
+    click: () => mainWindow.webContents.send('goto-step', step),
+    label
+  })
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'Choose Step',
+      submenu: menuItems.map(createMenuItem)
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { type: 'separator' },
+        { role: 'toggleDevTools' },
+        { role: 'togglefullscreen' }
+      ]
+    }
+  ])
+
+  Menu.setApplicationMenu(menu)
+
+  mainWindow.on('ready-to-show', async () => {
     mainWindow.show()
+    await setTimeout(4000)
+    mainWindow.webContents.send(EVENTS.GET_EXPRESS_PORT, expressPort)
+    mainWindow.webContents.send(EVENTS.GET_BACKEND_PORTS, [1, 2, 3])
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -32,67 +67,54 @@ function createWindow(): void {
     return { action: 'deny' }
   })
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-  // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
-  await session.defaultSession.extensions.loadExtension(
-    reduxDevToolsPath,
-    // allowFileAccess is required to load the devtools extension on file:// URLs.
-    { allowFileAccess: true }
-  )
-  await session.defaultSession.extensions.loadExtension(
-    reactDevToolsPath,
-    // allowFileAccess is required to load the devtools extension on file:// URLs.
-    { allowFileAccess: true }
-  )
-  // installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-  //   .then(([redux, react]) => console.log(`Added Extensions:  ${redux.name}, ${react.name}`))
-  //   .catch((err) => console.log('An error occurred: ', err))
+  expressPort = startExpress()
+  registerHandlers()
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    const csp = [
+      "default-src 'self'",
+      `connect-src 'self' http://localhost:${expressPort}`,
+      "img-src 'self' data:",
+      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='"
+    ].join('; ')
+
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [csp]
+      }
+    })
+  })
+
+  await session.defaultSession.extensions.loadExtension(REDUX_DEV_TOOLS_PATH, {
+    allowFileAccess: true
+  })
+
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
   createWindow()
-  ipcMain.handle('dialog:openFolder', async () => {
-    const fileEntities = await handleFolderSelection()
-    return fileEntities
-  })
-  ipcMain.handle('send-files', (_event, files) => {
-    console.log(files)
-  })
 
   app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

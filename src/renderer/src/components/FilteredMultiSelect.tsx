@@ -1,24 +1,25 @@
 import { useEffect } from 'react'
-import { ControllerRenderProps, useFormContext } from 'react-hook-form'
+import { ControllerRenderProps, useForm } from 'react-hook-form'
 
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { FilesSelection } from '@renderer/components/SelectFiles'
 import { MultiOption, MultiSelect } from '@renderer/components/ui/multi-select'
-import { selectEntities, setEntity } from '@renderer/slice/slice'
+import { selectEntities, setEntity } from '@renderer/slices/registerSlice'
 
 type FilteredMultiselectType = {
   name: 'entity1' | 'entity2'
   options: MultiOption[]
   field: ControllerRenderProps<FilesSelection, 'entity1' | 'entity2'>
+  watch: ReturnType<typeof useForm<FilesSelection>>['watch']
 }
 
 const FilteredMultiSelect = ({
   name,
   options,
-  field
+  field,
+  watch
 }: FilteredMultiselectType): React.JSX.Element => {
   const entities = useAppSelector(selectEntities)
-  const { watch } = useFormContext<FilesSelection>()
   const dispatch = useAppDispatch()
 
   useEffect(() => {

@@ -1,15 +1,32 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-// Custom APIs for renderer
+import { EVENTS } from './../main/utils'
+
 const api = {
-  openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
-  sendFiles: (files) => ipcRenderer.invoke('send-files', files)
+  openFolder: () => ipcRenderer.invoke(EVENTS.DIALOG_OPEN_FOLDER),
+  sendFiles: (files: string[]) => ipcRenderer.invoke(EVENTS.SENT_FILES, files),
+  onReceivePortlist: (callback: (list: number[]) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, list: number[]): void => callback(list)
+
+    ipcRenderer.on(EVENTS.GET_BACKEND_PORTS, handler)
+    return () => ipcRenderer.off(EVENTS.GET_BACKEND_PORTS, handler)
+  },
+  onReceiveExpressPort: (callback: (port: number) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, port: number): void => callback(port)
+
+    ipcRenderer.on(EVENTS.GET_EXPRESS_PORT, handler)
+    return () => ipcRenderer.off(EVENTS.GET_EXPRESS_PORT, handler)
+  },
+  startDrag: (file: string) => ipcRenderer.send(EVENTS.START_DRAG, file),
+  gotoStep: (callBack: (step: number) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, step: number): void => callBack(step)
+
+    ipcRenderer.on(EVENTS.GOTO_STEP, handler)
+    return () => ipcRenderer.off(EVENTS.GOTO_STEP, handler)
+  }
 }
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
@@ -18,8 +35,6 @@ if (process.contextIsolated) {
     console.error(error)
   }
 } else {
-  // @ts-ignore (define in dts)
   window.electron = electronAPI
-  // @ts-ignore (define in dts)
   window.api = api
 }

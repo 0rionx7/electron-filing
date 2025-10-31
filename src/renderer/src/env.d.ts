@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { FileEntity } from '@renderer/slice/slice'
+import { FileEntity } from '@renderer/slices/registerSlice'
 
 declare global {
   interface Window {
@@ -10,7 +10,10 @@ declare global {
         fileEntities: FileEntity[]
       }>
       sendFiles: (data) => Promise<never>
-      // add any other methods you expose from preload
+      onReceivePortlist: (callback: (list: number[]) => void) => () => Electron.IpcRenderer
+      onReceiveExpressPort: (callback: (port: number) => void) => () => Electron.IpcRenderer
+      gotoStep: (callback: (step: number) => void) => () => Electron.IpcRenderer
+      startDrag: (file: string) => void
     }
   }
 }
