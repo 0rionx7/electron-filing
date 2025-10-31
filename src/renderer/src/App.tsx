@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { useHandShakeExpressQuery } from '@renderer/api/api'
 import useGotoStep from '@renderer/hooks/useGotoStep'
 import StepAlert from '@renderer/components/StepAlert'
+import Area from '@renderer/components/Area'
 
 function App(): React.JSX.Element {
   const expressPort = useAppSelector(selectExpressPort)
@@ -39,27 +40,7 @@ function App(): React.JSX.Element {
 
   return (
     <>
-      <Stepper>
-        <StepAlert isOpen={openAlert} setOpenAlert={setOpenAlert} />
-        <Step when={1}>
-          <AccountDetails />
-        </Step>
-        <Step when={2}>
-          <PersonalInfo />
-        </Step>
-        <Step when={3}>
-          <SelectFolder />
-        </Step>
-        <Step when={4}>
-          <SelectFiles />
-        </Step>
-        <Step when={5}>
-          <Success />
-        </Step>
-      </Stepper>
-      <Button onClick={handleFetch} className="mt-5 bg-teal-400 hover:bg-teal-600">
-        HandShake Express
-      </Button>
+      <Area />
     </>
   )
 }
