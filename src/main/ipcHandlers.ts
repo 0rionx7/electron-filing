@@ -1,11 +1,11 @@
 import path from 'path'
-import { promises as fs } from 'fs'
+import fs, { promises as pfs } from 'fs'
 import { app, nativeImage, dialog } from 'electron'
 
 import { EVENTS, FileEntity, secureHandle, secureOn } from './utils'
 
 const ICON_PATH = path.join(app.getAppPath(), 'resources', 'drag-and-drop.png')
-const base64Icon = await fs.readFile(ICON_PATH, { encoding: 'base64' })
+const base64Icon = fs.readFileSync(ICON_PATH, { encoding: 'base64' })
 const icon = nativeImage.createFromDataURL(`data:image/png;base64,${base64Icon}`)
 
 export function registerHandlers(): void {
@@ -35,7 +35,7 @@ async function handleFolderSelection(): Promise<{
   await findFileEntities(1, rootPath)
 
   async function findFileEntities(level: number, folderPath: string): Promise<void> {
-    const items = await fs.readdir(folderPath, { withFileTypes: true })
+    const items = await pfs.readdir(folderPath, { withFileTypes: true })
 
     for (const item of items) {
       const filePath = path.join(item.parentPath, item.name)
