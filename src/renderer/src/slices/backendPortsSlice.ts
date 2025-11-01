@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-type backendPortsState = { expressPort: number | null; backendPorts: number[] }
-const initialState: backendPortsState = { expressPort: null, backendPorts: [] }
+type BackendPortsType = { expressPort: number | null; backendPorts: number[] }
+const initialState: BackendPortsType = { expressPort: null, backendPorts: [] }
 
 export const backendPortsSlice = createSlice({
   name: 'backendPorts',
