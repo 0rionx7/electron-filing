@@ -12,13 +12,13 @@ import {
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Field, FieldError } from '@renderer/components/ui/field'
 import { Button } from '@renderer/components/ui/button'
-import GeoItem from '@renderer/components/GeoItem'
+import GeolocationItems from '@renderer/components/GeolocationItems'
 import { cities, countries, districts, GeoEntity, regions, statesProvinces } from '@renderer/data'
 
 const KEYS = ['1', '2', '3', '4', '5'] as const
 const TITLES = ['regions', 'countries', 'statesProvinces', 'cities', 'districts']
 
-const Area = (): React.JSX.Element => {
+const Geolocations = (): React.JSX.Element => {
   const geolocationsState = useAppSelector(selectGeolocationsSelections)
   const dispatch = useAppDispatch()
   const { control, handleSubmit, watch, reset } = useForm<GeolocationSelectionsType>({
@@ -64,7 +64,7 @@ const Area = (): React.JSX.Element => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className={className}>
-                    <GeoItem title={title} level={i + 1} field={field} />
+                    <GeolocationItems title={title} level={i + 1} field={field} />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
@@ -86,7 +86,7 @@ const Area = (): React.JSX.Element => {
   )
 }
 
-export default Area
+export default Geolocations
 
 const getValues = (areas: GeoEntity[]): string[] => areas.map((area) => area.value)
 const getRenders = (data: string[], level: number): string[] => {

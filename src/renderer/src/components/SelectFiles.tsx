@@ -11,7 +11,7 @@ import {
   selectRootDirectory,
   setStep
 } from '@renderer/slices/registerSlice'
-import FilteredMultiSelect from '@renderer/components/FilteredMultiSelect'
+import FileItems from '@renderer/components/FileItems'
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
 
 export type FilesSelection = {
@@ -48,12 +48,7 @@ export function SelectFiles(): React.JSX.Element | null {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="relative mt-3">
                 <FieldLabel htmlFor="files-form-entity1">List 1</FieldLabel>
-                <FilteredMultiSelect
-                  watch={form.watch}
-                  name="entity1"
-                  options={fileList}
-                  field={field}
-                />
+                <FileItems watch={form.watch} name="entity1" options={fileList} field={field} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -64,12 +59,7 @@ export function SelectFiles(): React.JSX.Element | null {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="relative mt-3">
                 <FieldLabel htmlFor="files-form-entity2">List 1</FieldLabel>
-                <FilteredMultiSelect
-                  watch={form.watch}
-                  name="entity2"
-                  options={fileList}
-                  field={field}
-                />
+                <FileItems watch={form.watch} name="entity2" options={fileList} field={field} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

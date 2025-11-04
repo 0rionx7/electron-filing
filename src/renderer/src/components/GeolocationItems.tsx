@@ -1,28 +1,29 @@
 import { ControllerRenderProps } from 'react-hook-form'
 
 import { GeolocationSelectionsType, selectGeolocations } from '@renderer/slices/geolocationsSlice'
-import { GeoMultiselect } from '@renderer/components/GeoMultiselect'
+import { MultiSelect } from '@renderer/components/ui/multi-select'
 import { useAppSelector } from '@renderer/app/hooks'
+import { FieldLabel } from '@renderer/components/ui/field'
 
-type GeoItemProps = {
+type GeolocationItemsProps = {
   field: ControllerRenderProps<GeolocationSelectionsType, '1' | '2' | '3' | '4' | '5'>
   title: string
   level: number
 }
 
-const GeoItem = ({ level, title, field }: GeoItemProps): React.JSX.Element => {
+const GeolocationItems = ({ level, title, field }: GeolocationItemsProps): React.JSX.Element => {
   const geolocations = useAppSelector(selectGeolocations)
 
   const geoEntities = geolocations[level]
 
   return (
     <>
-      <h3 className="text-center p-1 capitalize">
+      <FieldLabel className="text-center p-1 capitalize">
         {title}-{geoEntities.length}
-      </h3>
-      <GeoMultiselect {...field} options={geoEntities} />
+      </FieldLabel>
+      <MultiSelect {...field} options={geoEntities} className="p-2 max-h-full" />
     </>
   )
 }
 
-export default GeoItem
+export default GeolocationItems

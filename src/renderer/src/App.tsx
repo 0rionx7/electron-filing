@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { useHandShakeExpressQuery } from '@renderer/api/api'
 import useGotoStep from '@renderer/hooks/useGotoStep'
 import StepAlert from '@renderer/components/StepAlert'
-import Area from '@renderer/components/Area'
+import Geolocations from '@renderer/components/Geolocations'
 
 function App(): React.JSX.Element {
   const expressPort = useAppSelector(selectExpressPort)
@@ -58,7 +58,7 @@ function App(): React.JSX.Element {
           <Success />
         </Step>
         <Step when={6}>
-          <Area />
+          <Geolocations />
         </Step>
       </Stepper>
       <Button onClick={handleFetch} className="mt-5 bg-teal-400 hover:bg-teal-600">
