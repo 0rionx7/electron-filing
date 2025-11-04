@@ -5,10 +5,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/
 import {
   GeolocationSelectionsType,
   geolocationsInitials,
-  Level,
   selectGeolocationsSelections,
   setLocations,
-  setSelection
+  setSelections
 } from '@renderer/slices/geolocationsSlice'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Field, FieldError } from '@renderer/components/ui/field'
@@ -22,38 +21,22 @@ const TITLES = ['regions', 'countries', 'statesProvinces', 'cities', 'districts'
 const Area = (): React.JSX.Element => {
   const geolocationsState = useAppSelector(selectGeolocationsSelections)
   const dispatch = useAppDispatch()
-  const { control, handleSubmit, subscribe, setValue, watch } = useForm<GeolocationSelectionsType>({
+  const { control, handleSubmit, watch, reset } = useForm<GeolocationSelectionsType>({
     defaultValues: geolocationsState
   })
 
   useEffect(() => {
     const subscription = watch((data, { type }) => {
-      console.log(type)
       const { newData, acceptedValues } = filterData(data as GeolocationSelectionsType)
-      console.log(newData, acceptedValues)
       dispatch(setLocations({ locations: acceptedValues }))
-
-      for (const [key, values] of Object.entries(newData)) {
-        dispatch(setSelection({ key, selections: values }))
-        if (type === 'change') setValue(key, values, { shouldDirty: false, shouldTouch: false })
-      }
+      dispatch(setSelections(newData))
+      if (type === 'change') reset(newData, { keepDirty: true, keepTouched: true })
     })
-    // const callback = subscribe({
-    //   formState: { values: true },
-    //   callback: ({ values, type }) => {
-    //     console.log(type)
-    //     const { newData, acceptedValues } = filterData(values as GeolocationSelectionsType)
-    //     console.log(newData, acceptedValues)
-    //     dispatch(setLocations({ locations: acceptedValues }))
 
-    //     for (const [key, values] of Object.entries(newData)) {
-    //       dispatch(setSelection({ key, selections: values }))
-    //     }
-    //   }
-    // })
-
-    // return () => callback()
-  }, [subscribe, dispatch, watch])
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [dispatch, watch, reset])
 
   const onSubmit: SubmitHandler<GeolocationSelectionsType> = async (values) => {
     console.log('submit geolocations:', values)
@@ -106,7 +89,7 @@ const Area = (): React.JSX.Element => {
 export default Area
 
 const getValues = (areas: GeoEntity[]): string[] => areas.map((area) => area.value)
-const getRenders = (data: string[], level: Level): string[] => {
+const getRenders = (data: string[], level: number): string[] => {
   const areas = geolocationsInitials[level].filter((geo) => data.includes(geo.value))
   return areas.flatMap((area) => area.renders)
 }
@@ -135,13 +118,13 @@ function filterData(data: GeolocationSelectionsType): {
     }
     if (!data[i].length) {
       newData[i] = []
-      acceptedValues[i + 1] = getRenders(acceptedValues[i], i as Level)
+      acceptedValues[i + 1] = getRenders(acceptedValues[i], i)
     } else {
       const dataSet = new Set(data[i])
       const acceptedSet = new Set(acceptedValues[i])
       newData[i] = [...dataSet.intersection(acceptedSet)]
       const nextRenders = newData[i].length ? newData[i] : acceptedValues[i]
-      acceptedValues[i + 1] = getRenders(nextRenders, i as Level)
+      acceptedValues[i + 1] = getRenders(nextRenders, i)
     }
   }
 

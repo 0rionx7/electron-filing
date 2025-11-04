@@ -27,13 +27,12 @@ type GeolocationsType = {
   geolocationsSelections: GeolocationSelectionsType
 }
 
-export type Level = 1 | 2 | 3 | 4 | 5
 export const geolocationsInitials = {
-  1: regions,
-  2: countries,
-  3: statesProvinces,
-  4: cities,
-  5: districts
+  '1': regions,
+  '2': countries,
+  '3': statesProvinces,
+  '4': cities,
+  '5': districts
 }
 
 const initialState: GeolocationsType = {
@@ -45,10 +44,8 @@ export const geolocationsSlice = createSlice({
   name: 'geolocations',
   initialState,
   reducers: {
-    setSelection: (state, action: PayloadAction<{ key: Level; selections: string[] }>) => {
-      const { key, selections } = action.payload
-      console.log(key, selections)
-      state.geolocationsSelections[key] = selections
+    setSelections: (state, action: PayloadAction<GeolocationSelectionsType>) => {
+      state.geolocationsSelections = action.payload
     },
     setLocations: (state, action: PayloadAction<{ locations: GeolocationSelectionsType }>) => {
       for (const [key, entities] of Object.entries(geolocationsInitials)) {
@@ -64,36 +61,5 @@ export const geolocationsSlice = createSlice({
   }
 })
 
-export const { setSelection, setLocations } = geolocationsSlice.actions
+export const { setSelections, setLocations } = geolocationsSlice.actions
 export const { selectGeolocations, selectGeolocationsSelections } = geolocationsSlice.selectors
-
-// function createFilter(state: WritableDraft<GeolocationsType>): void {
-//   const filter: string[] = []
-//   for (let i = 1; i < 6; i++) {
-//     if (state.geolocationsSelections[i].length) {
-//       for (const value of state.geolocationsSelections[i]) {
-//         const area = geolocationsInitials[i].find((loc) => loc.value === value)
-//         filter.push(...area.renders)
-//       }
-//       filterAreas(i + 1, filter, state)
-//     } else if (!filter.length) {
-//       state.geolocations[i + 1] = geolocationsInitials[i + 1]
-//     }
-//   }
-// }
-// function filterAreas(
-//   level: number,
-//   filter: string[],
-//   state: WritableDraft<GeolocationsType>
-// ): void {
-//   if (level === 6) return
-//   const filter2: string[] = []
-//   state.geolocations[level] = geolocationsInitials[level].filter((geo) => {
-//     if (filter.includes(geo.value)) {
-//       filter2.push(...geo.renders)
-//       return true
-//     }
-//     return false
-//   })
-//   filterAreas(level + 1, filter2, state)
-// }

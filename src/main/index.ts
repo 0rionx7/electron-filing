@@ -30,7 +30,8 @@ function createWindow(): void {
     { step: 1, label: 'AccountDetails' },
     { step: 2, label: 'PersonalInfo' },
     { step: 3, label: 'ChooseFolder' },
-    { step: 4, label: 'ChooseFiles' }
+    { step: 4, label: 'ChooseFiles' },
+    { step: 6, label: 'ChooseLocations' }
   ]
   const createMenuItem = ({ step, label }): { click: () => void; label: string } => ({
     click: () => mainWindow.webContents.send('goto-step', step),

@@ -13,7 +13,6 @@ type GeoMultiselectProps = {
   value: string[]
   onChange: (next: string[]) => void
   options: MultiOption[]
-  level: number
 }
 
 export function GeoMultiselect({

@@ -20,7 +20,7 @@ const GeoItem = ({ level, title, field }: GeoItemProps): React.JSX.Element => {
       <h3 className="text-center p-1 capitalize">
         {title}-{geoEntities.length}
       </h3>
-      <GeoMultiselect {...field} options={geoEntities} level={level} />
+      <GeoMultiselect {...field} options={geoEntities} />
     </>
   )
 }
