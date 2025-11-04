@@ -1,25 +1,149 @@
-import * as React from 'react'
+import { useEffect } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import AreaItem from '@renderer/components/GeoItem'
-import * as data from '@renderer/data'
+import {
+  GeolocationSelectionsType,
+  geolocationsInitials,
+  Level,
+  selectGeolocationsSelections,
+  setLocations,
+  setSelection
+} from '@renderer/slices/geolocationsSlice'
+import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
+import { Field, FieldError } from '@renderer/components/ui/field'
+import { Button } from '@renderer/components/ui/button'
+import GeoItem from '@renderer/components/GeoItem'
+import { cities, countries, districts, GeoEntity, regions, statesProvinces } from '@renderer/data'
+
+const KEYS = ['1', '2', '3', '4', '5'] as const
+const TITLES = ['regions', 'countries', 'statesProvinces', 'cities', 'districts']
 
 const Area = (): React.JSX.Element => {
+  const geolocationsState = useAppSelector(selectGeolocationsSelections)
+  const dispatch = useAppDispatch()
+  const { control, handleSubmit, subscribe, setValue, watch } = useForm<GeolocationSelectionsType>({
+    defaultValues: geolocationsState
+  })
+
+  useEffect(() => {
+    const subscription = watch((data, { type }) => {
+      console.log(type)
+      const { newData, acceptedValues } = filterData(data as GeolocationSelectionsType)
+      console.log(newData, acceptedValues)
+      dispatch(setLocations({ locations: acceptedValues }))
+
+      for (const [key, values] of Object.entries(newData)) {
+        dispatch(setSelection({ key, selections: values }))
+        if (type === 'change') setValue(key, values, { shouldDirty: false, shouldTouch: false })
+      }
+    })
+    // const callback = subscribe({
+    //   formState: { values: true },
+    //   callback: ({ values, type }) => {
+    //     console.log(type)
+    //     const { newData, acceptedValues } = filterData(values as GeolocationSelectionsType)
+    //     console.log(newData, acceptedValues)
+    //     dispatch(setLocations({ locations: acceptedValues }))
+
+    //     for (const [key, values] of Object.entries(newData)) {
+    //       dispatch(setSelection({ key, selections: values }))
+    //     }
+    //   }
+    // })
+
+    // return () => callback()
+  }, [subscribe, dispatch, watch])
+
+  const onSubmit: SubmitHandler<GeolocationSelectionsType> = async (values) => {
+    console.log('submit geolocations:', values)
+  }
+
   return (
-    <Card className="bg-stone-300">
+    <Card className="w-4xl h-[80vh] bg-stone-300">
       <CardHeader>
-        <CardTitle className="text-gray-600 justify-self-center">Area</CardTitle>
+        <CardTitle className="text-gray-600 justify-self-center">Geolocation</CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-3 gap-2 grid-rows-[repeat(2,--spacing(62))]">
-        <AreaItem GeoEntities={data.regions} />
-        <AreaItem GeoEntities={data.countries} />
-        <AreaItem GeoEntities={data.statesProvinces} />
-        <AreaItem GeoEntities={data.cities} />
-        <AreaItem className="row-start-1 col-start-3 row-span-2 " GeoEntities={data.districts} />
+      <CardContent className="flex-1">
+        <form
+          id="geo-form"
+          onSubmit={handleSubmit(onSubmit)}
+          className="h-full grid grid-cols-3 grid-rows-[repeat(2,--spacing(62))] gap-2"
+        >
+          {TITLES.map((title, i) => {
+            const name = KEYS[i]
+            const className = i + 1 === 5 ? ' row-start-1 col-start-3 row-span-2' : ''
+
+            return (
+              <Controller
+                key={title}
+                name={name}
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className={className}>
+                    <GeoItem title={title} level={i + 1} field={field} />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            )
+          })}
+        </form>
       </CardContent>
-      <CardFooter></CardFooter>
+      <CardFooter>
+        <Button
+          type="submit"
+          form="geo-form"
+          className="bg-green-600 text-white hover:bg-neutral-800 shadow rounded-xl px-4 py-2"
+        >
+          Select
+        </Button>
+      </CardFooter>
     </Card>
   )
 }
 
 export default Area
+
+const getValues = (areas: GeoEntity[]): string[] => areas.map((area) => area.value)
+const getRenders = (data: string[], level: Level): string[] => {
+  const areas = geolocationsInitials[level].filter((geo) => data.includes(geo.value))
+  return areas.flatMap((area) => area.renders)
+}
+
+const initialRenders = {
+  1: getValues(regions),
+  2: getValues(countries),
+  3: getValues(statesProvinces),
+  4: getValues(cities),
+  5: getValues(districts)
+}
+
+function filterData(data: GeolocationSelectionsType): {
+  newData: GeolocationSelectionsType
+  acceptedValues: GeolocationSelectionsType
+} {
+  const acceptedValues = { ...initialRenders }
+  const newData = {} as GeolocationSelectionsType
+
+  for (let i = 1; i <= 5; i++) {
+    if (i === 5) {
+      const dataSet = new Set(data[i])
+      const acceptedSet = new Set(acceptedValues[i])
+      newData[i] = [...dataSet.intersection(acceptedSet)]
+      break
+    }
+    if (!data[i].length) {
+      newData[i] = []
+      acceptedValues[i + 1] = getRenders(acceptedValues[i], i as Level)
+    } else {
+      const dataSet = new Set(data[i])
+      const acceptedSet = new Set(acceptedValues[i])
+      newData[i] = [...dataSet.intersection(acceptedSet)]
+      const nextRenders = newData[i].length ? newData[i] : acceptedValues[i]
+      acceptedValues[i + 1] = getRenders(nextRenders, i as Level)
+    }
+  }
+
+  return { newData, acceptedValues }
+}

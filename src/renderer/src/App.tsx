@@ -16,11 +16,11 @@ import Area from '@renderer/components/Area'
 
 function App(): React.JSX.Element {
   const expressPort = useAppSelector(selectExpressPort)
-  const { data } = useHandShakeExpressQuery(undefined)
+  // const { data } = useHandShakeExpressQuery(undefined)
   const { openAlert, setOpenAlert } = useGotoStep()
   const dispatch = useAppDispatch()
 
-  console.log(expressPort, data)
+  // console.log(expressPort, data)
 
   const handleFetch = async (): Promise<void> => {
     const response = await fetch(`http://localhost:${expressPort}`)
@@ -28,15 +28,15 @@ function App(): React.JSX.Element {
     console.log(msg)
   }
 
-  useEffect(() => {
-    const urlUnsubscribe = window.api.onReceiveExpressPort((port) => dispatch(setExpressPort(port)))
-    const portsUnsubscribe = window.api.onReceivePortlist((list) => dispatch(setPorts(list)))
+  // useEffect(() => {
+  //   const urlUnsubscribe = window.api.onReceiveExpressPort((port) => dispatch(setExpressPort(port)))
+  //   const portsUnsubscribe = window.api.onReceivePortlist((list) => dispatch(setPorts(list)))
 
-    return () => {
-      urlUnsubscribe()
-      portsUnsubscribe()
-    }
-  }, [dispatch])
+  //   return () => {
+  //     urlUnsubscribe()
+  //     portsUnsubscribe()
+  //   }
+  // }, [dispatch])
 
   return (
     <>

@@ -1,27 +1,27 @@
-import { Fragment } from 'react'
+import { ControllerRenderProps } from 'react-hook-form'
 
-import { ScrollArea } from '@renderer/components/ui/scroll-area'
-import { Separator } from '@renderer/components/ui/separator'
-import { GeoEntity } from '@renderer/data'
+import { GeolocationSelectionsType, selectGeolocations } from '@renderer/slices/geolocationsSlice'
+import { GeoMultiselect } from '@renderer/components/GeoMultiselect'
+import { useAppSelector } from '@renderer/app/hooks'
 
 type GeoItemProps = {
-  GeoEntities: GeoEntity[]
-  className?: string
+  field: ControllerRenderProps<GeolocationSelectionsType, '1' | '2' | '3' | '4' | '5'>
+  title: string
+  level: number
 }
 
-const GeoItem = ({ GeoEntities, className }: GeoItemProps): React.JSX.Element => {
+const GeoItem = ({ level, title, field }: GeoItemProps): React.JSX.Element => {
+  const geolocations = useAppSelector(selectGeolocations)
+
+  const geoEntities = geolocations[level]
+
   return (
-    <ScrollArea className={`w-48 rounded-md border border-gray-500 ${className}`}>
-      <div className="p-4">
-        <h4 className="mb-4 text-sm leading-none font-medium text-center">Tags</h4>
-        {GeoEntities.map((geoEntity) => (
-          <Fragment key={geoEntity.label}>
-            <div className="text-sm">{geoEntity.label}</div>
-            <Separator className="my-2" />
-          </Fragment>
-        ))}
-      </div>
-    </ScrollArea>
+    <>
+      <h3 className="text-center p-1 capitalize">
+        {title}-{geoEntities.length}
+      </h3>
+      <GeoMultiselect {...field} options={geoEntities} level={level} />
+    </>
   )
 }
 

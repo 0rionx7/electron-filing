@@ -42,7 +42,6 @@ export function MultiSelect({
     set.has(v) ? set.delete(v) : set.add(v)
     onChange([...set])
   }
-
   const clear = (e: React.MouseEvent) => {
     e.stopPropagation()
     onChange([])

@@ -8,13 +8,13 @@ export const regions: GeoEntity[] = [
   { label: 'North America', value: 'na', renders: ['us', 'ca', 'mx'] },
   { label: 'Europe', value: 'eu', renders: ['uk', 'de', 'fr'] },
   { label: 'Asia Pacific', value: 'apac', renders: ['jp', 'au', 'sg'] },
-  { label: 'South America', value: 'sa', renders: ['br'] },
-  { label: 'Middle East', value: 'me', renders: ['ae'] },
-  { label: 'Africa', value: 'af', renders: ['za'] },
-  { label: 'Central America', value: 'ca_region', renders: ['cr'] },
-  { label: 'Eastern Europe', value: 'ee', renders: ['pl'] },
-  { label: 'Southeast Asia', value: 'sea', renders: ['th'] },
-  { label: 'Caribbean', value: 'cb', renders: ['jm'] }
+  { label: 'South America', value: 'sa', renders: ['br'] }
+  // { label: 'Middle East', value: 'me', renders: ['ae'] },
+  // { label: 'Africa', value: 'af', renders: ['za'] },
+  // { label: 'Central America', value: 'ca_region', renders: ['cr'] },
+  // { label: 'Eastern Europe', value: 'ee', renders: ['pl'] },
+  // { label: 'Southeast Asia', value: 'sea', renders: ['th'] },
+  // { label: 'Caribbean', value: 'cb', renders: ['jm'] }
 ]
 
 export const countries: GeoEntity[] = [

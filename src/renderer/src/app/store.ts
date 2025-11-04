@@ -4,9 +4,10 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 
 import { appApi } from '@renderer/api/api'
 import { backendPortsSlice } from '@renderer/slices/backendPortsSlice'
+import { geolocationsSlice } from '@renderer/slices/geolocationsSlice'
 import { registerSlice } from '@renderer/slices/registerSlice'
 
-const rootReducer = combineSlices(registerSlice, backendPortsSlice, appApi)
+const rootReducer = combineSlices(registerSlice, backendPortsSlice, geolocationsSlice, appApi)
 
 export type RootState = ReturnType<typeof rootReducer>
 
