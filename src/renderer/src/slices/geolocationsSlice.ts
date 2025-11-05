@@ -24,7 +24,7 @@ export type GeolocationSelectionsType = {
 }
 type GeolocationsType = {
   geolocations: GeolocationType
-  geolocationsSelections: GeolocationSelectionsType
+  geolocationSelections: GeolocationSelectionsType
 }
 
 export const geolocationsInitials = {
@@ -37,7 +37,7 @@ export const geolocationsInitials = {
 
 const initialState: GeolocationsType = {
   geolocations: geolocationsInitials,
-  geolocationsSelections: { '1': [], '2': [], '3': [], '4': [], '5': [] }
+  geolocationSelections: { '1': [], '2': [], '3': [], '4': [], '5': [] }
 }
 
 export const geolocationsSlice = createSlice({
@@ -45,7 +45,7 @@ export const geolocationsSlice = createSlice({
   initialState,
   reducers: {
     setSelections: (state, action: PayloadAction<GeolocationSelectionsType>) => {
-      state.geolocationsSelections = action.payload
+      state.geolocationSelections = action.payload
     },
     setLocations: (state, action: PayloadAction<{ locations: GeolocationSelectionsType }>) => {
       for (const [key, entities] of Object.entries(geolocationsInitials)) {
@@ -57,9 +57,9 @@ export const geolocationsSlice = createSlice({
   },
   selectors: {
     selectGeolocations: (geoState) => geoState.geolocations,
-    selectGeolocationsSelections: (geoState) => geoState.geolocationsSelections
+    selectGeolocationSelections: (geoState) => geoState.geolocationSelections
   }
 })
 
 export const { setSelections, setLocations } = geolocationsSlice.actions
-export const { selectGeolocations, selectGeolocationsSelections } = geolocationsSlice.selectors
+export const { selectGeolocations, selectGeolocationSelections } = geolocationsSlice.selectors

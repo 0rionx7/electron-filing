@@ -1,10 +1,6 @@
-export type GeoEntity = {
-  label: string
-  value: string
-  renders: string[]
-}
+import { GeolocationEntity } from '@renderer/slices/geolocationsSlice'
 
-export const regions: GeoEntity[] = [
+export const regions: GeolocationEntity[] = [
   { label: 'North America', value: 'na', renders: ['us', 'ca', 'mx'] },
   { label: 'Europe', value: 'eu', renders: ['uk', 'de', 'fr'] },
   { label: 'Asia Pacific', value: 'apac', renders: ['jp', 'au', 'sg'] },
@@ -17,7 +13,7 @@ export const regions: GeoEntity[] = [
   // { label: 'Caribbean', value: 'cb', renders: ['jm'] }
 ]
 
-export const countries: GeoEntity[] = [
+export const countries: GeolocationEntity[] = [
   { label: 'United States', value: 'us', renders: ['ny', 'ca_state', 'tx'] },
   { label: 'Canada', value: 'ca', renders: ['on', 'qc', 'bc'] },
   { label: 'Mexico', value: 'mx', renders: ['mx_city', 'jal'] },
@@ -30,7 +26,7 @@ export const countries: GeoEntity[] = [
   { label: 'Brazil', value: 'br', renders: ['sp', 'rj'] }
 ]
 
-export const statesProvinces: GeoEntity[] = [
+export const statesProvinces: GeolocationEntity[] = [
   { label: 'New York', value: 'ny', renders: ['nyc', 'buf', 'roc'] },
   { label: 'California', value: 'ca_state', renders: ['la', 'sf', 'sd'] },
   { label: 'Texas', value: 'tx', renders: ['hou', 'dal', 'aus'] },
@@ -54,7 +50,7 @@ export const statesProvinces: GeoEntity[] = [
   { label: 'Rio de Janeiro', value: 'rj', renders: ['rio'] }
 ]
 
-export const cities: GeoEntity[] = [
+export const cities: GeolocationEntity[] = [
   {
     label: 'New York City',
     value: 'nyc',
@@ -107,7 +103,7 @@ export const cities: GeoEntity[] = [
   { label: 'Rio City', value: 'rio', renders: ['rio_copa'] }
 ]
 
-export const districts: GeoEntity[] = [
+export const districts: GeolocationEntity[] = [
   { label: 'Manhattan', value: 'nyc_manhattan', renders: [] },
   { label: 'Brooklyn', value: 'nyc_brooklyn', renders: [] },
   { label: 'Queens', value: 'nyc_queens', renders: [] },

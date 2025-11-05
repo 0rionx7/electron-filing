@@ -30,10 +30,11 @@ export function MultiSelect({
     onChange([...set])
   }
 
+  const filter = (value: string, search: string) =>
+    value.toLowerCase().startsWith(search.toLowerCase()) ? 1 : 0
+
   return (
-    <Command
-      filter={(value, search) => (value.toLowerCase().startsWith(search.toLowerCase()) ? 1 : 0)}
-    >
+    <Command filter={filter}>
       <CommandInput placeholder="Search…" />
       <CommandList className={className}>
         <CommandEmpty>{emptyText}</CommandEmpty>

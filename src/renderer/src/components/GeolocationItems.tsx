@@ -1,9 +1,9 @@
 import { ControllerRenderProps } from 'react-hook-form'
 
-import { GeolocationSelectionsType, selectGeolocations } from '@renderer/slices/geolocationsSlice'
 import { MultiSelect } from '@renderer/components/ui/multi-select'
 import { useAppSelector } from '@renderer/app/hooks'
 import { FieldLabel } from '@renderer/components/ui/field'
+import { GeolocationSelectionsType, selectGeolocations } from '@renderer/slices/geolocationsSlice'
 
 type GeolocationItemsProps = {
   field: ControllerRenderProps<GeolocationSelectionsType, '1' | '2' | '3' | '4' | '5'>

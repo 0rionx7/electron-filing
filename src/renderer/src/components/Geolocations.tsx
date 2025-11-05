@@ -2,27 +2,29 @@ import { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
-import {
-  GeolocationSelectionsType,
-  geolocationsInitials,
-  selectGeolocationsSelections,
-  setLocations,
-  setSelections
-} from '@renderer/slices/geolocationsSlice'
+
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Field, FieldError } from '@renderer/components/ui/field'
 import { Button } from '@renderer/components/ui/button'
 import GeolocationItems from '@renderer/components/GeolocationItems'
-import { cities, countries, districts, GeoEntity, regions, statesProvinces } from '@renderer/data'
+import { cities, countries, districts, regions, statesProvinces } from '@renderer/data'
+import {
+  GeolocationEntity,
+  GeolocationSelectionsType,
+  geolocationsInitials,
+  selectGeolocationSelections,
+  setLocations,
+  setSelections
+} from '@renderer/slices/geolocationsSlice'
 
 const KEYS = ['1', '2', '3', '4', '5'] as const
 const TITLES = ['regions', 'countries', 'statesProvinces', 'cities', 'districts']
 
 const Geolocations = (): React.JSX.Element => {
-  const geolocationsState = useAppSelector(selectGeolocationsSelections)
+  const geolocationSelections = useAppSelector(selectGeolocationSelections)
   const dispatch = useAppDispatch()
   const { control, handleSubmit, watch, reset } = useForm<GeolocationSelectionsType>({
-    defaultValues: geolocationsState
+    defaultValues: geolocationSelections
   })
 
   useEffect(() => {
@@ -47,15 +49,15 @@ const Geolocations = (): React.JSX.Element => {
       <CardHeader>
         <CardTitle className="text-gray-600 justify-self-center">Geolocation</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1">
+      <CardContent className="overflow-hidden flex-1">
         <form
           id="geo-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="h-full grid grid-cols-3 grid-rows-[repeat(2,--spacing(62))] gap-2"
+          className="h-full grid grid-cols-3 grid-rows-[repeat(2,1fr)] gap-2"
         >
           {TITLES.map((title, i) => {
             const name = KEYS[i]
-            const className = i + 1 === 5 ? ' row-start-1 col-start-3 row-span-2' : ''
+            const className = `${i === 4 ? 'row-start-1 col-start-3 row-span-2 ' : ''}overflow-auto`
 
             return (
               <Controller
@@ -88,7 +90,7 @@ const Geolocations = (): React.JSX.Element => {
 
 export default Geolocations
 
-const getValues = (areas: GeoEntity[]): string[] => areas.map((area) => area.value)
+const getValues = (areas: GeolocationEntity[]): string[] => areas.map((area) => area.value)
 const getRenders = (data: string[], level: number): string[] => {
   const areas = geolocationsInitials[level].filter((geo) => data.includes(geo.value))
   return areas.flatMap((area) => area.renders)
