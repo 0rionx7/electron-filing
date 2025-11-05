@@ -29,10 +29,12 @@ const Geolocations = (): React.JSX.Element => {
 
   useEffect(() => {
     const subscription = watch((data, { type }) => {
-      const { newData, acceptedValues } = filterData(data as GeolocationSelectionsType)
-      dispatch(setLocations({ locations: acceptedValues }))
-      dispatch(setSelections(newData))
-      if (type === 'change') reset(newData, { keepDirty: true, keepTouched: true })
+      if (type === 'change') {
+        const { newData, acceptedValues } = filterData(data as GeolocationSelectionsType)
+        dispatch(setLocations({ locations: acceptedValues }))
+        dispatch(setSelections(newData))
+        reset(newData, { keepDirty: true, keepTouched: true })
+      }
     })
 
     return () => {
@@ -96,7 +98,7 @@ const getRenders = (data: string[], level: number): string[] => {
   return areas.flatMap((area) => area.renders)
 }
 
-const initialRenders = {
+const initialAccepted = {
   1: getValues(regions),
   2: getValues(countries),
   3: getValues(statesProvinces),
@@ -108,27 +110,18 @@ function filterData(data: GeolocationSelectionsType): {
   newData: GeolocationSelectionsType
   acceptedValues: GeolocationSelectionsType
 } {
-  const acceptedValues = { ...initialRenders }
+  const acceptedValues = { ...initialAccepted }
   const newData = {} as GeolocationSelectionsType
 
-  for (let i = 1; i <= 5; i++) {
-    if (i === 5) {
-      const dataSet = new Set(data[i])
-      const acceptedSet = new Set(acceptedValues[i])
-      newData[i] = [...dataSet.intersection(acceptedSet)]
-      break
-    }
-    if (!data[i].length) {
-      newData[i] = []
-      acceptedValues[i + 1] = getRenders(acceptedValues[i], i)
-    } else {
-      const dataSet = new Set(data[i])
-      const acceptedSet = new Set(acceptedValues[i])
-      newData[i] = [...dataSet.intersection(acceptedSet)]
-      const nextRenders = newData[i].length ? newData[i] : acceptedValues[i]
-      acceptedValues[i + 1] = getRenders(nextRenders, i)
-    }
-  }
+  Object.entries(data).forEach(([key, selectedValues]) => {
+    const index = Number(key)
+    const dataSet = new Set(selectedValues)
+    const acceptedSet = new Set(acceptedValues[index])
+    newData[index] = [...dataSet.intersection(acceptedSet)]
+    if (index === 5) return
+    const rendersFrom = newData[index].length ? newData[index] : acceptedValues[index]
+    acceptedValues[index + 1] = getRenders(rendersFrom, index)
+  })
 
   return { newData, acceptedValues }
 }
