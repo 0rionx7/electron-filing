@@ -8,6 +8,8 @@ import { Field, FieldError } from '@renderer/components/ui/field'
 import { Button } from '@renderer/components/ui/button'
 import GeolocationItems from '@renderer/components/GeolocationItems'
 import { cities, countries, districts, regions, statesProvinces } from '@renderer/data'
+import { DevTool } from '@hookform/devtools'
+
 import {
   GeolocationEntity,
   GeolocationSelectionsType,
@@ -86,6 +88,7 @@ const Geolocations = (): React.JSX.Element => {
           Select
         </Button>
       </CardFooter>
+      <DevTool control={control} />
     </Card>
   )
 }
