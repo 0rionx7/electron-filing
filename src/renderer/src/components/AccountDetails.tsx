@@ -8,6 +8,7 @@ import { selectFirstStepData, setStep, updateFirstStepData } from '@renderer/sli
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import { Field } from '@renderer/components/ui/field'
 import InputField from '@renderer/components/InputField'
+import { DevTool } from '@hookform/devtools'
 
 export const fieldLabelClass = `
   absolute left-3 -top-6 font-medium capitalize
@@ -70,6 +71,7 @@ export default function AccountDetails(): React.JSX.Element {
           </Button>
         </Field>
       </CardFooter>
+      <DevTool control={form.control} />
     </Card>
   )
 }
