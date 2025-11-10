@@ -10,6 +10,7 @@ import {
 } from '@renderer/components/ui/table'
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -64,15 +65,15 @@ const defaultColumns: ColumnDef<Case, unknown>[] = [
   {
     id: 'actions',
     header: 'Actions',
-    cell: () => <Actions />,
+    cell: (info) => <Actions info={info} />,
     size: 100
   }
 ]
 
 export default function DataTable(): React.JSX.Element {
   const columns = useMemo<ColumnDef<Case, unknown>[]>(() => defaultColumns, [])
-  const [columnFilters, setColumnFilters] = useState([])
-
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  console.log(columnFilters)
   const [data] = useState<Case[]>(() => makeData(300))
 
   const table = useReactTable<Case>({
