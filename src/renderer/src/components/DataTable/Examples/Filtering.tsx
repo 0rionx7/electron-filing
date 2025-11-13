@@ -6,7 +6,6 @@ import {
   Column,
   ColumnDef,
   ColumnFiltersState,
-  RowData,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -17,14 +16,6 @@ import {
 
 import { makeData, Person } from './makeData'
 import { startsWithFilter } from '@renderer/components/DataTable/DataTable'
-
-declare module '@tanstack/react-table' {
-  //allows us to define custom properties for our columns
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select'
-  }
-}
 
 export default function Filtering(): React.JSX.Element {
   const rerender = React.useReducer(() => ({}), {})[1]

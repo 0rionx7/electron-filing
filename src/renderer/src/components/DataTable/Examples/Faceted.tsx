@@ -7,7 +7,6 @@ import {
   ColumnDef,
   ColumnFiltersState,
   FilterFn,
-  RowData,
   flexRender,
   getCoreRowModel,
   getFacetedMinMaxValues,
@@ -21,14 +20,6 @@ import {
 
 import { makeData, Person } from './makeData'
 import { Case } from '@renderer/components/DataTable/makeData'
-
-declare module '@tanstack/react-table' {
-  //allows us to define custom properties for our columns
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select'
-  }
-}
 
 const startsWithFilter: FilterFn<Case> = (row, columnId, filterValue) => {
   const cellValue = String(row.getValue(columnId) ?? '').toLowerCase()

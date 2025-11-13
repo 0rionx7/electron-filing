@@ -1,9 +1,7 @@
 import DataTable from '@renderer/components/DataTable/DataTable'
-// import Resizing from '@renderer/components/DataTable/Examples/Resizing'
-// import Filtering from '@renderer/components/DataTable/Examples/Filtering'
+import Window from '@renderer/components/Virtualization/Window'
 
 export default function App(): React.JSX.Element {
-  // return <Filtering />
-  // return <Resizing />
+  return <Window />
   return <DataTable />
 }
