@@ -43,16 +43,16 @@ export default function FilterColumn({
           onChange={(e) =>
             column.setFilterValue((old: [string, string]) => [e.target.value, old?.[1]])
           }
-          className="h-8"
+          className="h-6 rounded"
         />
-        <Input
+        {/* <Input
           type="date"
           value={columnFilterValue?.[1] ?? ''}
           onChange={(e) =>
             column.setFilterValue((old: [string, string]) => [old?.[0], e.target.value])
           }
           className="h-8"
-        />
+        /> */}
       </div>
     )
 
@@ -86,9 +86,9 @@ export default function FilterColumn({
   ) : filterVariant === 'select' ? (
     <Select
       onValueChange={(value) => column.setFilterValue(value)}
-      value={columnFilterValue?.toString()}
+      value={columnFilterValue?.toString() ?? ''}
     >
-      <SelectTrigger className="w-full h-6!">
+      <SelectTrigger className="w-full h-6! rounded">
         <SelectValue placeholder="All" />
       </SelectTrigger>
       <SelectContent>
