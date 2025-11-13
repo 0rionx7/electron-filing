@@ -17,3 +17,13 @@ declare global {
     }
   }
 }
+
+declare module '@tanstack/react-table' {
+  interface FilterFns {
+    startsWith: FilterFn<unknown>
+    dateRange: FilterFn<unknown>
+  }
+  interface ColumnMeta<TData extends RowData, TValue> {
+    filterVariant?: 'text' | 'range' | 'select' | 'date'
+  }
+}
