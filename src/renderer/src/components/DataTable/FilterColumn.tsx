@@ -85,13 +85,14 @@ export default function FilterColumn({
     </div>
   ) : filterVariant === 'select' ? (
     <Select
-      onValueChange={(value) => column.setFilterValue(value)}
+      onValueChange={(value) => column.setFilterValue(value !== 'All' ? value : '')}
       value={columnFilterValue?.toString() ?? ''}
     >
       <SelectTrigger className="w-full h-6! rounded">
         <SelectValue placeholder="All" />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value="All">All</SelectItem>
         <SelectItem value="Resolved">Resolved</SelectItem>
         <SelectItem value="Canceled">Canceled</SelectItem>
         <SelectItem value="Process">Process</SelectItem>

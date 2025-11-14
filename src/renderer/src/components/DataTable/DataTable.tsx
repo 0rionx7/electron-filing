@@ -1,16 +1,6 @@
 import { useMemo, useState } from 'react'
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@renderer/components/ui/table'
 import {
   ColumnDef,
-  ColumnFiltersState,
   FilterFn,
   flexRender,
   getCoreRowModel,
@@ -22,15 +12,24 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { makeData, Case } from '@renderer/components/DataTable/makeData'
-import SearchTable from '@renderer/components/DataTable/SearchTable'
-import Status from '@renderer/components/DataTable/Status'
-import Actions from '@renderer/components/DataTable/Actions'
-import { cn } from '@renderer/lib/utils'
 
-import FilterColumn from '@renderer/components/DataTable/FilterColumn'
-import Pagination from '@renderer/components/DataTable/Pagination'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@renderer/components/ui/table'
+import { cn } from '@renderer/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader } from '@renderer/components/ui/card'
+import { makeData, Case } from '@renderer/components/DataTable/makeData'
+import FilterColumn from '@renderer/components/DataTable/FilterColumn'
+import SearchTable from '@renderer/components/DataTable/SearchTable'
+import Pagination from '@renderer/components/DataTable/Pagination'
+import Actions from '@renderer/components/DataTable/Actions'
+import Status from '@renderer/components/DataTable/Status'
+import '@renderer/assets/table.css'
 
 const defaultColumns: ColumnDef<Case, unknown>[] = [
   {
@@ -104,15 +103,12 @@ export const dateFilter: FilterFn<Case> = (row, columnId, filterValue) => {
 
 export default function DataTable(): React.JSX.Element {
   const columns = useMemo<ColumnDef<Case, unknown>[]>(() => defaultColumns, [])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-
   const [data] = useState<Case[]>(() => makeData(300))
 
   const table = useReactTable<Case>({
     data,
     columns,
-    state: { columnFilters },
-    onColumnFiltersChange: setColumnFilters,
+    columnResizeMode: 'onChange',
     filterFns: { startsWith: startsWithFilter, dateRange: dateFilter },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -121,7 +117,9 @@ export default function DataTable(): React.JSX.Element {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     getFilteredRowModel: getFilteredRowModel(),
-    debugTable: true
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: true
   })
 
   return (
@@ -130,7 +128,7 @@ export default function DataTable(): React.JSX.Element {
         <SearchTable table={table} />
       </CardHeader>
       <CardContent className="h-[71vh] gap-0 overflow-auto">
-        <Table className="bg-white table-fixed">
+        <Table className="w-[80vw] bg-white table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="border-0!">
@@ -144,9 +142,9 @@ export default function DataTable(): React.JSX.Element {
                         header.column.getCanSort() ? 'cursor-pointer select-none' : '',
                         header.column.id === 'status' ? 'text-center' : ''
                       )}
-                      style={{ width: header.column.columnDef.size }}
+                      style={{ width: header.getSize() }}
                     >
-                      <div className="flex flex-col">
+                      <div className="flex flex-col relative">
                         <div
                           onClick={
                             header.column.getCanSort()
@@ -165,6 +163,26 @@ export default function DataTable(): React.JSX.Element {
                               ] ?? 'swap_vert'}
                             </span>
                           )}
+                          <div
+                            {...{
+                              onDoubleClick: () => header.column.resetSize(),
+                              onMouseDown: header.getResizeHandler(),
+                              onTouchStart: header.getResizeHandler(),
+                              className: `resizer ${table.options.columnResizeDirection}${
+                                header.column.getIsResizing() ? ' isResizing' : ''
+                              }`,
+                              style: {
+                                transform:
+                                  table.options.columnResizeMode === 'onEnd' &&
+                                  header.column.getIsResizing()
+                                    ? `translateX(${
+                                        (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
+                                        (table.getState().columnSizingInfo.deltaOffset ?? 0)
+                                      }px)`
+                                    : ''
+                              }
+                            }}
+                          />
                         </div>
                         {header.column.getCanFilter() ? (
                           <FilterColumn column={header.column} />
