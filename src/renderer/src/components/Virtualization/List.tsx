@@ -9,15 +9,11 @@ const List = ({ places }: { places: Place[] }): React.JSX.Element => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const itemRef = (el: HTMLLIElement | null): void => {
-    if (el && itemHeight === null) {
-      const height = el.offsetHeight
-      setItemHeight(height)
-    }
+    if (el && itemHeight === null) setItemHeight(el.offsetHeight)
   }
 
   useEffect(() => {
     if (!itemHeight) return
-
     const el = scrollContainerRef.current
     if (!el) return
 
@@ -29,8 +25,8 @@ const List = ({ places }: { places: Place[] }): React.JSX.Element => {
       const end = start + Math.ceil(containerHeight / itemHeight)
 
       setRange({
-        start: Math.max(0, start),
-        end: Math.min(places.length, end)
+        start: Math.max(0, start - 10),
+        end: Math.min(places.length, end + 10)
       })
     }
     el.addEventListener('scroll', updateRange)
@@ -42,11 +38,8 @@ const List = ({ places }: { places: Place[] }): React.JSX.Element => {
     }
   }, [itemHeight, places.length])
 
-  const visible = places.slice(
-    Math.max(0, range.start - 10),
-    Math.min(places.length, range.end + 10)
-  )
-  const offsetY = Math.max(0, range.start - 10) * (itemHeight ?? 0)
+  const visible = places.slice(range.start, range.end)
+  const offsetY = Math.max(0, range.start) * (itemHeight ?? 0)
   const totalHeight = places.length * (itemHeight ?? 0)
 
   return (
