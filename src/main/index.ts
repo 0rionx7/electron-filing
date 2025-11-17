@@ -31,12 +31,21 @@ function createWindow(): void {
     { step: 2, label: 'PersonalInfo' },
     { step: 3, label: 'ChooseFolder' },
     { step: 4, label: 'ChooseFiles' },
-    { step: 6, label: 'ChooseLocations' }
+    { type: 'separator' },
+    { step: 6, label: 'ChooseLocations' },
+    { type: 'separator' },
+    { step: 7, label: 'DataTable' },
+    { step: 8, label: 'VirtualizedList' }
   ]
-  const createMenuItem = ({ step, label }): { click: () => void; label: string } => ({
-    click: () => mainWindow.webContents.send('goto-step', step),
-    label
-  })
+  const createMenuItem = (item): Electron.MenuItemConstructorOptions => {
+    if (item.type === 'separator') return { type: 'separator' }
+
+    const { step, label } = item
+    return {
+      label,
+      click: () => mainWindow.webContents.send('goto-step', step)
+    }
+  }
   const menu = Menu.buildFromTemplate([
     {
       label: 'Choose Step',
@@ -89,7 +98,7 @@ app.whenReady().then(async () => {
       "img-src 'self' data:",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "script-src 'self' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4XkE=' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='"
+      "script-src 'self' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='"
     ].join('; ')
 
     callback({

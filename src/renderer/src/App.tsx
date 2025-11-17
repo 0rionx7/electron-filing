@@ -13,6 +13,19 @@ import { useHandShakeExpressQuery } from '@renderer/api/api'
 import useGotoStep from '@renderer/hooks/useGotoStep'
 import StepAlert from '@renderer/components/StepAlert'
 import Geolocations from '@renderer/components/Geolocations'
+import DataTable from '@renderer/components/DataTable/DataTable'
+import Windowing from '@renderer/components/Virtualization/Windowing'
+
+const steps = {
+  1: AccountDetails,
+  2: PersonalInfo,
+  3: SelectFolder,
+  4: SelectFiles,
+  5: Success,
+  6: Geolocations,
+  7: DataTable,
+  8: Windowing
+}
 
 function App(): React.JSX.Element {
   const expressPort = useAppSelector(selectExpressPort)
@@ -42,24 +55,11 @@ function App(): React.JSX.Element {
     <>
       <Stepper>
         <StepAlert isOpen={openAlert} setOpenAlert={setOpenAlert} />
-        <Step when={1}>
-          <AccountDetails />
-        </Step>
-        <Step when={2}>
-          <PersonalInfo />
-        </Step>
-        <Step when={3}>
-          <SelectFolder />
-        </Step>
-        <Step when={4}>
-          <SelectFiles />
-        </Step>
-        <Step when={5}>
-          <Success />
-        </Step>
-        <Step when={6}>
-          <Geolocations />
-        </Step>
+        {Object.entries(steps).map(([when, Component]) => (
+          <Step key={when} when={+when}>
+            <Component />
+          </Step>
+        ))}
       </Stepper>
       <Button onClick={handleFetch} className="mt-5 bg-teal-400 hover:bg-teal-600">
         HandShake Express

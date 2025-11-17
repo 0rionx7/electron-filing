@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { makeData } from '@renderer/components/Virtualization/makeData'
 import List from '@renderer/components/Virtualization/List'
 
-const ListContainer = (): React.JSX.Element => {
+const Windowing = (): React.JSX.Element => {
   const [places] = useState(() => makeData(120_000))
 
   return (
@@ -20,4 +20,4 @@ const ListContainer = (): React.JSX.Element => {
   )
 }
 
-export default ListContainer
+export default Windowing

@@ -23,13 +23,12 @@ import {
 } from '@renderer/components/ui/table'
 import { cn } from '@renderer/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader } from '@renderer/components/ui/card'
-import { makeData, Case } from '@renderer/components/DataTable/makeData'
+import { Case, cases } from '@renderer/components/DataTable/makeData'
 import FilterColumn from '@renderer/components/DataTable/filter/FilterColumn'
 import SearchTable from '@renderer/components/DataTable/SearchTable'
 import Pagination from '@renderer/components/DataTable/Pagination'
 import Actions from '@renderer/components/DataTable/Actions'
 import Status from '@renderer/components/DataTable/Status'
-import '@renderer/assets/resizer.css'
 
 const defaultColumns: ColumnDef<Case, unknown>[] = [
   {
@@ -105,7 +104,7 @@ export const dateFilter: FilterFn<Case> = (row, columnId, filterValue) => {
 
 export default function DataTable(): React.JSX.Element {
   const columns = useMemo<ColumnDef<Case, unknown>[]>(() => defaultColumns, [])
-  const [data] = useState<Case[]>(() => makeData(300))
+  const [data] = useState<Case[]>(cases)
 
   const table = useReactTable<Case>({
     data,
@@ -166,23 +165,22 @@ export default function DataTable(): React.JSX.Element {
                         </div>
                         {header.column.getCanFilter() && <FilterColumn column={header.column} />}
                         <div
-                          {...{
-                            onDoubleClick: () => header.column.resetSize(),
-                            onMouseDown: header.getResizeHandler(),
-                            onTouchStart: header.getResizeHandler(),
-                            className: `resizer ${table.options.columnResizeDirection}${
-                              header.column.getIsResizing() ? ' isResizing' : ''
-                            }`,
-                            style: {
-                              transform:
-                                table.options.columnResizeMode === 'onEnd' &&
-                                header.column.getIsResizing()
-                                  ? `translateX(${
-                                      (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
-                                      (table.getState().columnSizingInfo.deltaOffset ?? 0)
-                                    }px)`
-                                  : ''
-                            }
+                          onDoubleClick={() => header.column.resetSize()}
+                          onMouseDown={header.getResizeHandler()}
+                          onTouchStart={header.getResizeHandler()}
+                          className={cn(
+                            'absolute right-0 top-0 h-full w-1 bg-light-grey cursor-e-resize opacity-0 hover:opacity-100 select-none touch-none',
+                            header.column.getIsResizing() ? 'bg-indigo-600 opacity-100' : ''
+                          )}
+                          style={{
+                            transform:
+                              table.options.columnResizeMode === 'onEnd' &&
+                              header.column.getIsResizing()
+                                ? `translateX(${
+                                    (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
+                                    (table.getState().columnSizingInfo.deltaOffset ?? 0)
+                                  }px)`
+                                : ''
                           }}
                         />
                       </div>

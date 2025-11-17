@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Column } from '@tanstack/react-table'
+import { X } from 'lucide-react'
 
 import {
   Command,
@@ -16,9 +17,9 @@ import { cn } from '@renderer/lib/utils'
 
 const InputFilter = ({ column }: { column: Column<Case, unknown> }): React.JSX.Element => {
   const [open, setOpen] = useState(false)
-  const [filter, setFilter] = useState<string[]>([])
 
-  const isFiltered = (column.getFilterValue() as string[])?.length
+  const filter = column.getFilterValue() as string[]
+  const isFiltered = filter?.length
 
   const sortedUniqueValues = Array.from(column.getFacetedUniqueValues()).sort((a, b) => {
     return a[0] <= b[0] ? -1 : 1
@@ -31,7 +32,6 @@ const InputFilter = ({ column }: { column: Column<Case, unknown> }): React.JSX.E
   const handleCheckEntry = (checked: boolean | string, value: string): void => {
     const filterSet = new Set(filter)
     checked ? filterSet.add(value) : filterSet.delete(value)
-    setFilter([...filterSet])
     column.setFilterValue([...filterSet])
   }
 
@@ -46,14 +46,26 @@ const InputFilter = ({ column }: { column: Column<Case, unknown> }): React.JSX.E
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command filter={startsWithFilter}>
-          <CommandInput placeholder={`Search ${column.id}...`} />
+          <div className="relative">
+            <CommandInput placeholder={`Search ${column.id}...`} className="pr-8" />
+            {filter?.length > 0 && (
+              <button
+                onClick={() => {
+                  column.setFilterValue([])
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
           <CommandList>
             <CommandEmpty>No entry found.</CommandEmpty>
             <CommandGroup>
               {sortedUniqueValues.map(([value, count]) => (
                 <CommandItem key={value} className="flex items-center gap-2">
                   <Checkbox
-                    checked={filter.includes(value)}
+                    checked={filter?.includes(value)}
                     onCheckedChange={(checked) => handleCheckEntry(checked, value)}
                   />
                   {`${value} (${count} entr${count > 1 ? 'ies' : 'y'})`}
