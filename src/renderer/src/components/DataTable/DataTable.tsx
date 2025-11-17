@@ -24,12 +24,12 @@ import {
 import { cn } from '@renderer/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader } from '@renderer/components/ui/card'
 import { makeData, Case } from '@renderer/components/DataTable/makeData'
-import FilterColumn from '@renderer/components/DataTable/FilterColumn'
+import FilterColumn from '@renderer/components/DataTable/filter/FilterColumn'
 import SearchTable from '@renderer/components/DataTable/SearchTable'
 import Pagination from '@renderer/components/DataTable/Pagination'
 import Actions from '@renderer/components/DataTable/Actions'
 import Status from '@renderer/components/DataTable/Status'
-import '@renderer/assets/table.css'
+import '@renderer/assets/resizer.css'
 
 const defaultColumns: ColumnDef<Case, unknown>[] = [
   {
@@ -50,7 +50,8 @@ const defaultColumns: ColumnDef<Case, unknown>[] = [
   {
     accessorKey: 'lastName',
     cell: (info) => info.getValue(),
-    size: 200
+    size: 200,
+    filterFn: 'startsWith'
   },
   {
     accessorKey: 'date',
@@ -70,13 +71,13 @@ const defaultColumns: ColumnDef<Case, unknown>[] = [
     accessorKey: 'region',
     cell: (info) => info.getValue(),
     size: 200,
-    enableSorting: false
+    filterFn: 'startsWith'
   },
   {
     accessorKey: 'status',
     cell: (info) => <Status info={info} />,
     size: 100,
-    meta: { filterVariant: 'select' }
+    filterFn: 'startsWith'
   },
   {
     id: 'actions',
@@ -86,9 +87,10 @@ const defaultColumns: ColumnDef<Case, unknown>[] = [
   }
 ]
 
-export const startsWithFilter: FilterFn<Case> = (row, columnId, filterValue) => {
+export const startsWithFilter: FilterFn<Case> = (row, columnId, filterValue: string[]) => {
   const cellValue = String(row.getValue(columnId) ?? '').toLowerCase()
-  return cellValue.startsWith(String(filterValue).toLowerCase())
+  if (!filterValue.length) return true
+  return filterValue.some((f) => cellValue === f.toLowerCase())
 }
 
 export const dateFilter: FilterFn<Case> = (row, columnId, filterValue) => {
@@ -138,13 +140,13 @@ export default function DataTable(): React.JSX.Element {
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        'capitalize text-left px-0 pb-1 first:pl-4 last:pr-4',
+                        'capitalize text-left px-2 pb-1 first:pl-4 last:pr-4',
                         header.column.getCanSort() ? 'cursor-pointer select-none' : '',
                         header.column.id === 'status' ? 'text-center' : ''
                       )}
                       style={{ width: header.getSize() }}
                     >
-                      <div className="flex flex-col relative">
+                      <div className="flex items-center justify-between relative">
                         <div
                           onClick={
                             header.column.getCanSort()
@@ -154,41 +156,35 @@ export default function DataTable(): React.JSX.Element {
                           className="flex items-center cursor-pointer select-none"
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
-                          {['firstName', 'lastName', 'date', 'status'].includes(
-                            header.column.id
-                          ) && (
-                            <span className="material-symbols-outlined text-black text-caption-sm!">
+                          {header.column.getCanSort() && (
+                            <span className="material-symbols-outlined text-black text-caption-sm! ml-2">
                               {{ asc: 'arrow_upward', desc: 'arrow_downward' }[
                                 header.column.getIsSorted() as string
                               ] ?? 'swap_vert'}
                             </span>
                           )}
-                          <div
-                            {...{
-                              onDoubleClick: () => header.column.resetSize(),
-                              onMouseDown: header.getResizeHandler(),
-                              onTouchStart: header.getResizeHandler(),
-                              className: `resizer ${table.options.columnResizeDirection}${
-                                header.column.getIsResizing() ? ' isResizing' : ''
-                              }`,
-                              style: {
-                                transform:
-                                  table.options.columnResizeMode === 'onEnd' &&
-                                  header.column.getIsResizing()
-                                    ? `translateX(${
-                                        (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
-                                        (table.getState().columnSizingInfo.deltaOffset ?? 0)
-                                      }px)`
-                                    : ''
-                              }
-                            }}
-                          />
                         </div>
-                        {header.column.getCanFilter() ? (
-                          <FilterColumn column={header.column} />
-                        ) : (
-                          <div className="h-6" />
-                        )}
+                        {header.column.getCanFilter() && <FilterColumn column={header.column} />}
+                        <div
+                          {...{
+                            onDoubleClick: () => header.column.resetSize(),
+                            onMouseDown: header.getResizeHandler(),
+                            onTouchStart: header.getResizeHandler(),
+                            className: `resizer ${table.options.columnResizeDirection}${
+                              header.column.getIsResizing() ? ' isResizing' : ''
+                            }`,
+                            style: {
+                              transform:
+                                table.options.columnResizeMode === 'onEnd' &&
+                                header.column.getIsResizing()
+                                  ? `translateX(${
+                                      (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
+                                      (table.getState().columnSizingInfo.deltaOffset ?? 0)
+                                    }px)`
+                                  : ''
+                            }
+                          }}
+                        />
                       </div>
                     </TableHead>
                   )

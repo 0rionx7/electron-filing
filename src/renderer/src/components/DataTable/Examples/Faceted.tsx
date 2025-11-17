@@ -26,7 +26,7 @@ const startsWithFilter: FilterFn<Case> = (row, columnId, filterValue) => {
   return cellValue.startsWith(String(filterValue).toLowerCase())
 }
 
-export default function App(): React.JSX.Element {
+export default function Faceted(): React.JSX.Element {
   const rerender = React.useReducer(() => ({}), {})[1]
 
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -36,7 +36,10 @@ export default function App(): React.JSX.Element {
       {
         accessorKey: 'firstName',
         cell: (info) => info.getValue(),
-        filterFn: 'startsWith'
+        filterFn: 'startsWith',
+        meta: {
+          filterVariant: 'range'
+        }
       },
       {
         accessorFn: (row) => row.lastName,
@@ -243,9 +246,9 @@ function Filter({ column }: { column: Column<Person, unknown> }): React.JSX.Elem
     <div>
       <div className="flex space-x-2">
         <DebouncedInput
-          type="number"
-          min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-          max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
+          type="string"
+          // min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
+          // max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
           value={(columnFilterValue as [number, number])?.[0] ?? ''}
           onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
           placeholder={`Min ${
@@ -256,9 +259,7 @@ function Filter({ column }: { column: Column<Person, unknown> }): React.JSX.Elem
           className="w-24 border shadow rounded"
         />
         <DebouncedInput
-          type="number"
-          min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-          max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
+          type="string"
           value={(columnFilterValue as [number, number])?.[1] ?? ''}
           onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
           placeholder={`Max ${
