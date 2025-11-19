@@ -10,8 +10,6 @@ import Stepper, { Step } from '@renderer/components/Stepper'
 import { Button } from '@renderer/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { useHandShakeExpressQuery } from '@renderer/api/api'
-import useGotoStep from '@renderer/hooks/useGotoStep'
-import StepAlert from '@renderer/components/StepAlert'
 import Geolocations from '@renderer/components/Geolocations'
 import DataTable from '@renderer/components/DataTable/DataTable'
 import Windowing from '@renderer/components/Virtualization/Windowing'
@@ -30,7 +28,6 @@ const steps = {
 function App(): React.JSX.Element {
   const expressPort = useAppSelector(selectExpressPort)
   const { data } = useHandShakeExpressQuery(undefined)
-  const { openAlert, setOpenAlert } = useGotoStep()
   const dispatch = useAppDispatch()
 
   console.log(expressPort, data)
@@ -54,7 +51,6 @@ function App(): React.JSX.Element {
   return (
     <>
       <Stepper>
-        <StepAlert isOpen={openAlert} setOpenAlert={setOpenAlert} />
         {Object.entries(steps).map(([when, Component]) => (
           <Step key={when} when={+when}>
             <Component />
