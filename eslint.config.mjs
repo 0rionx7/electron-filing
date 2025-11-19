@@ -5,18 +5,12 @@ import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
 import eslintPluginReactRefresh from 'eslint-plugin-react-refresh'
 
-export default defineConfig(
+export default defineConfig([
   { ignores: ['**/node_modules', '**/dist', '**/out', 'src/renderer/src/components/ui/**'] },
   tseslint.configs.recommended,
   eslintPluginReact.configs.flat.recommended,
   eslintPluginReact.configs.flat['jsx-runtime'],
-  {
-    settings: {
-      react: {
-        version: 'detect'
-      }
-    }
-  },
+  { settings: { react: { version: 'detect' } } },
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
@@ -26,8 +20,12 @@ export default defineConfig(
     rules: {
       ...eslintPluginReactHooks.configs.recommended.rules,
       ...eslintPluginReactRefresh.configs.vite.rules,
-      'react-refresh/only-export-components': ['off', { allowExportNames: ['loader'] }]
+      'react-refresh/only-export-components': ['off', { allowExportNames: ['loader'] }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^_' }
+      ]
     }
   },
   eslintConfigPrettier
-)
+])

@@ -24,7 +24,7 @@ declare module '@tanstack/react-table' {
     startsWith?: FilterFn<unknown>
     dateRange?: FilterFn<unknown>
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   interface ColumnMeta<TData extends RowData, TValue> {
     filterVariant?: 'text' | 'range' | 'select' | 'date'
   }

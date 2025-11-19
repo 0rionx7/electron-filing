@@ -12,7 +12,7 @@ const SearchTable = ({ table }: { table: Table<Case> }): React.JSX.Element => {
           placeholder="Search..."
           className="placeholder:text-caption placeholder:text-light-grey"
           value={(table.getColumn('firstName')?.getFilterValue() as string) ?? ''}
-          onChange={(e) => table.getColumn('firstName')?.setFilterValue(e.target.value)}
+          onChange={(e) => table.getColumn('firstName')?.setFilterValue([e.target.value])}
         />
         <InputGroupAddon>
           <span className="material-symbols-outlined text-[20px] text-light-grey">search</span>

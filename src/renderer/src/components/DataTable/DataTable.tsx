@@ -89,7 +89,7 @@ const defaultColumns: ColumnDef<Case, unknown>[] = [
 export const startsWithFilter: FilterFn<Case> = (row, columnId, filterValue: string[]) => {
   const cellValue = String(row.getValue(columnId) ?? '').toLowerCase()
   if (!filterValue.length) return true
-  return filterValue.some((f) => cellValue === f.toLowerCase())
+  return filterValue.some((f) => cellValue.startsWith(f.toLowerCase()))
 }
 
 export const dateFilter: FilterFn<Case> = (row, columnId, filterValue) => {

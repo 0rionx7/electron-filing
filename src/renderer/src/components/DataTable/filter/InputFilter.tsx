@@ -50,9 +50,7 @@ const InputFilter = ({ column }: { column: Column<Case, unknown> }): React.JSX.E
             <CommandInput placeholder={`Search ${column.id}...`} className="pr-8" />
             {filter?.length > 0 && (
               <button
-                onClick={() => {
-                  column.setFilterValue([])
-                }}
+                onClick={() => column.setFilterValue([])}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
               >
                 <X size={16} />
