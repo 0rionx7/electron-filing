@@ -63,7 +63,7 @@ const InputFilter = ({ column }: { column: Column<Case, unknown> }): React.JSX.E
               {sortedUniqueValues.map(([value, count]) => (
                 <CommandItem key={value} className="flex items-center gap-2">
                   <Checkbox
-                    checked={filter?.includes(value)}
+                    checked={filter?.includes(value) || false}
                     onCheckedChange={(checked) => handleCheckEntry(checked, value)}
                   />
                   {`${value} (${count} entr${count > 1 ? 'ies' : 'y'})`}

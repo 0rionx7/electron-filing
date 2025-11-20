@@ -104,13 +104,16 @@ export const dateFilter: FilterFn<Case> = (row, columnId, filterValue) => {
 
 export default function DataTable(): React.JSX.Element {
   const columns = useMemo<ColumnDef<Case, unknown>[]>(() => defaultColumns, [])
+  const [globalFilter, setGlobalFilter] = useState<string>('')
   const [data] = useState<Case[]>(cases)
 
   const table = useReactTable<Case>({
     data,
     columns,
-    columnResizeMode: 'onChange',
+    state: { globalFilter },
+    onGlobalFilterChange: setGlobalFilter,
     filterFns: { startsWith: startsWithFilter, dateRange: dateFilter },
+    columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
