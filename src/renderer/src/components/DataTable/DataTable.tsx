@@ -29,6 +29,7 @@ import SearchTable from '@renderer/components/DataTable/SearchTable'
 import Pagination from '@renderer/components/DataTable/Pagination'
 import Actions from '@renderer/components/DataTable/Actions'
 import Status from '@renderer/components/DataTable/Status'
+import DataRows from '@renderer/components/DataTable/DataRows'
 
 const defaultColumns: ColumnDef<Case, unknown>[] = [
   {
@@ -194,31 +195,7 @@ export default function DataTable(): React.JSX.Element {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.map((row) => {
-              return (
-                <TableRow
-                  key={row.id}
-                  className={`odd:bg-odd-row even:bg-even-row leading-base border-0`}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <TableCell
-                        key={cell.id}
-                        className={cn(
-                          'h-[57px]',
-                          cell.column.id === 'status' ? 'text-center' : '',
-                          'first:pl-4 last:pr-4',
-                          'text-overflow:ellipsis',
-                          'truncate'
-                        )}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    )
-                  })}
-                </TableRow>
-              )
-            })}
+            <DataRows table={table} />
           </TableBody>
         </Table>
       </CardContent>

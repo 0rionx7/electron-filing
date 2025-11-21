@@ -6,13 +6,13 @@ import { cn } from '@renderer/lib/utils'
 import Actions from '@renderer/components/DataTable/Actions'
 
 const DataRows = ({ table }: { table: Table<Case> }): React.JSX.Element => {
-  const rows = table.getCoreRowModel().rows.map((row) => row.original)
+  const allRows = table.getCoreRowModel().rows.map((row) => row.original)
   const filters = table.getState().columnFilters
 
-  const visibleRows: Case[] = !filters.length ? rows : []
+  const visibleRows: Case[] = !filters.length ? allRows : []
 
   filters.forEach((filter) => {
-    const filtered = rows.filter((row) =>
+    const filtered = allRows.filter((row) =>
       (filter.value as string[]).some((v) => v === row[filter.id])
     )
     visibleRows.push(...filtered)
@@ -20,14 +20,19 @@ const DataRows = ({ table }: { table: Table<Case> }): React.JSX.Element => {
 
   const leafColumns = table.getAllLeafColumns()
 
+  const uniqueRows = [...new Set(visibleRows)]
+
   return (
     <>
-      {visibleRows.map((dataRow, rowIndex) => (
-        <TableRow key={rowIndex} className="odd:bg-odd-row even:bg-even-row leading-base border-0">
-          {leafColumns.map((col, colIndex) => {
+      {uniqueRows.map((row) => (
+        <TableRow
+          key={row.id + row.firstName}
+          className="odd:bg-odd-row even:bg-even-row leading-base border-0"
+        >
+          {leafColumns.map((col) => {
             return (
               <TableCell
-                key={`${rowIndex}-${col.id ?? colIndex}`}
+                key={col.id}
                 className={cn(
                   'h-[57px]',
                   col.id === 'status' ? 'text-center' : '',
@@ -36,9 +41,13 @@ const DataRows = ({ table }: { table: Table<Case> }): React.JSX.Element => {
                   'truncate'
                 )}
               >
-                {col.id !== 'actions' && col.id !== 'date' && dataRow[col.id]}
-                {col.id === 'actions' && <Actions />}
-                {col.id === 'date' && dataRow[col.id].toLocaleDateString('el-GR')}
+                {col.id === 'actions' ? (
+                  <Actions />
+                ) : col.id === 'date' ? (
+                  row.date.toLocaleDateString('el-GR')
+                ) : (
+                  row[col.id]
+                )}
               </TableCell>
             )
           })}
