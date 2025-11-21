@@ -1,7 +1,8 @@
+import { Table } from '@tanstack/react-table'
+
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@renderer/components/ui/input-group'
 import { Case } from '@renderer/components/DataTable/makeData'
 import { Button } from '@renderer/components/ui/button'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@renderer/components/ui/input-group'
-import { Table } from '@tanstack/react-table'
 
 const SearchTable = ({ table }: { table: Table<Case> }): React.JSX.Element => {
   return (

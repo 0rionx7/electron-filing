@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Column } from '@tanstack/react-table'
+import { useMemo, useState } from 'react'
+import { Column, Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
 
 import {
@@ -21,12 +21,16 @@ const InputFilter = ({ column }: { column: Column<Case, unknown> }): React.JSX.E
   const filter = column.getFilterValue() as string[]
   const isFiltered = filter?.length
 
-  const sortedUniqueValues = Array.from(column.getFacetedUniqueValues()).sort((a, b) => {
-    return a[0] <= b[0] ? -1 : 1
-  })
+  const sortedUniqueValues = useMemo(
+    () =>
+      Array.from(column.getFacetedUniqueValues()).sort((a, b) => {
+        return a[0] <= b[0] ? -1 : 1
+      }),
+    [column]
+  )
 
   const startsWithFilter = (value: string, search: string): 1 | 0 => {
-    return value.toLowerCase().startsWith(String(search).toLowerCase()) ? 1 : 0
+    return value.toLowerCase().includes(String(search).toLowerCase()) ? 1 : 0
   }
 
   const handleCheckEntry = (checked: boolean | string, value: string): void => {

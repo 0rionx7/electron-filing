@@ -5,11 +5,11 @@ import DeleteConfirmDialog from '@renderer/components/DataTable/DeleteConfirmDia
 import { CellContext } from '@tanstack/react-table'
 import { Case } from '@renderer/components/DataTable/makeData'
 
-const Actions = ({ info }: { info: CellContext<Case, unknown> }): React.JSX.Element => {
+const Actions = ({ info }: { info?: CellContext<Case, unknown> }): React.JSX.Element => {
   const [open, setOpen] = useState(false)
 
   const handleDelete = (): void => {
-    console.log(`${info.row.original.id} Deleted successfully!`)
+    console.log(`${info?.row.original.id} Deleted successfully!`)
   }
 
   return (
