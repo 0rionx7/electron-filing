@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Table } from '@tanstack/react-table'
 
 import { TableCell, TableRow } from '@renderer/components/ui/table'
@@ -9,18 +10,33 @@ const DataRows = ({ table }: { table: Table<Case> }): React.JSX.Element => {
   const allRows = table.getCoreRowModel().rows.map((row) => row.original)
   const filters = table.getState().columnFilters
 
-  const visibleRows: Case[] = !filters.length ? allRows : []
+  // const visibleRows: Case[] = !filters.length ? allRows : []
+  // console.time()
+  // filters.forEach((filter) => {
+  //   const filtered = allRows.filter((row) =>
+  //     (filter.value as string[]).some((v) => v === row[filter.id])
+  //   )
+  //   visibleRows.push(...filtered)
+  // })
+  // console.timeEnd()
 
-  filters.forEach((filter) => {
-    const filtered = allRows.filter((row) =>
-      (filter.value as string[]).some((v) => v === row[filter.id])
-    )
-    visibleRows.push(...filtered)
-  })
+  console.time('sec')
+  const filtered = useMemo(
+    () =>
+      allRows.filter((row) => {
+        if (!filters.length) return true
+        for (const filter of filters) {
+          if ((filter.value as string[]).some((v) => v === row[filter.id])) return true
+        }
+        return false
+      }),
+    [allRows, filters]
+  )
+  console.timeEnd('sec')
 
   const leafColumns = table.getAllLeafColumns()
 
-  const uniqueRows = [...new Set(visibleRows)]
+  const uniqueRows = [...new Set(filtered)]
 
   return (
     <>
