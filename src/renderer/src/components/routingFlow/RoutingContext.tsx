@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { routingMap } from '@renderer/main'
@@ -19,6 +19,10 @@ function Stepper({ children }: { children: React.ReactNode }): React.JSX.Element
   const [canMove, setCanMove] = useState({ back: false, next: true })
   const navigate = useNavigate()
 
+  useEffect(() => {
+    navigate('/', { replace: true })
+  }, [])
+
   const handleNext = (selectedFlow?: string): void => {
     const { step, flow } = position
     if (selectedFlow) {
@@ -30,10 +34,8 @@ function Stepper({ children }: { children: React.ReactNode }): React.JSX.Element
     }
     const branch = selectedFlow || flow
     const nextRoute = Object.keys(routingMap[branch][selectedFlow ? 0 : step + 1])[0]
-    if (nextRoute) {
-      const nextPath = `${branch !== 'base' ? `/${branch}` : ''}/${nextRoute}`
-      navigate(nextPath)
-    }
+    const nextPath = `${branch !== 'base' ? `/${branch}` : ''}/${nextRoute}`
+    navigate(nextPath)
   }
 
   const handleBack = (): void => {
@@ -46,7 +48,7 @@ function Stepper({ children }: { children: React.ReactNode }): React.JSX.Element
         nextRoute === 'index' ? '/' : `${flow !== 'base' ? `/${flow}` : ''}/${nextRoute}`
       navigate(nextPath)
     } else if (flow !== 'base') {
-      setPosition({ flow: 'base', step: 2 })
+      setPosition({ flow: 'base', step: routingMap.base.length - 1 })
       setCanMove({ back: true, next: true })
       navigate('flowControl')
     }

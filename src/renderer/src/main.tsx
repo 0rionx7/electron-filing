@@ -46,6 +46,33 @@ const routes = (
   </Route>
 )
 
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <>
+//       <Route path="/" element={<App />}>
+//         <Route index element={<Welcome />} />
+//         <Route path="personalInfo" element={<PersonalInfo />} />
+//         <Route path="flowControl" element={<FlowControl />} />
+//         <Route path="flow1">
+//           <Route path="f1step1" element={<FirstStep />} />
+//           <Route path="f1step2" element={<SecondStep />} />
+//           <Route path="f1step3" element={<ThirdStep />} />
+//         </Route>
+//         <Route path="flow2">
+//           <Route path="f2step1" element={<FirstStep />} />
+//           <Route path="f2step2" element={<SecondStep />} />
+//           <Route path="f2step3" element={<ThirdStep />} />
+//         </Route>
+//         <Route path="flow3">
+//           <Route path="f3step1" element={<FirstStep />} />
+//           <Route path="f3step2" element={<SecondStep />} />
+//           <Route path="f3step3" element={<ThirdStep />} />
+//         </Route>
+//       </Route>
+//     </>
+//   )
+// )
+
 const router = createBrowserRouter(createRoutesFromElements(routes))
 
 createRoot(document.getElementById('root')!).render(
