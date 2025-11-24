@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@renderer/components/ui/select'
+import { routingMap } from '@renderer/main'
 
 const FlowControl = (): React.JSX.Element => {
   const { handleNext, handleBack } = useContext(RoutingContext)
@@ -25,9 +26,13 @@ const FlowControl = (): React.JSX.Element => {
             <SelectValue placeholder="Flow" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="flow1">Flow1</SelectItem>
-            <SelectItem value="flow2">Flow2</SelectItem>
-            <SelectItem value="flow3">Flow3</SelectItem>
+            {Object.keys(routingMap).map((key) =>
+              key === 'base' ? null : (
+                <SelectItem value={key} key={key}>
+                  {key}
+                </SelectItem>
+              )
+            )}
           </SelectContent>
         </Select>
       </CardContent>
