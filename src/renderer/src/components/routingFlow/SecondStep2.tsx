@@ -4,13 +4,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/
 import { RoutingContext } from '@renderer/components/routingFlow/RoutingContext'
 import { Button } from '@renderer/components/ui/button'
 
-const Welcome = (): React.JSX.Element => {
-  const { handleNext } = useContext(RoutingContext)
+const SecondStep2 = (): React.JSX.Element => {
+  const { handleNext, handleBack, canNext } = useContext(RoutingContext)
 
   return (
     <Card className="w-md bg-stone-300">
       <CardHeader>
-        <CardTitle className="text-gray-600 mb-4 ml-3">Hello!</CardTitle>
+        <CardTitle className="text-gray-600 mb-4 ml-3">Flow 2 SecondStep</CardTitle>
       </CardHeader>
       <CardContent></CardContent>
       <CardFooter>
@@ -18,13 +18,23 @@ const Welcome = (): React.JSX.Element => {
           type="button"
           variant="outline"
           className="border border-gray-400 text-gray-700 hover:bg-gray-100 rounded-xl px-4 py-2"
-          onClick={() => handleNext()}
+          onClick={() => handleBack()}
         >
-          Next
+          back
         </Button>
+        {canNext && (
+          <Button
+            type="button"
+            variant="outline"
+            className="border border-gray-400 text-gray-700 hover:bg-gray-100 rounded-xl px-4 py-2"
+            onClick={() => handleNext()}
+          >
+            Next
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )
 }
 
-export default Welcome
+export default SecondStep2

@@ -1,11 +1,11 @@
-import { Outlet } from 'react-router'
-
+import Base from '@renderer/components/routingFlow/Base'
 import Stepper from '@renderer/components/routingFlow/RoutingContext'
+import Welcome from '@renderer/components/routingFlow/Welcome'
 
 function App(): React.JSX.Element {
   return (
     <Stepper>
-      <Outlet />
+      <Base />
     </Stepper>
   )
 }
