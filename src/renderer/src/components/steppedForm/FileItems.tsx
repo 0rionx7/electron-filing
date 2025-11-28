@@ -3,7 +3,7 @@ import { ControllerRenderProps, useForm } from 'react-hook-form'
 import { X } from 'lucide-react'
 
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
-import { FilesSelection } from '@renderer/components/SelectFiles'
+import { FilesSelection } from '@renderer/components/steppedForm/SelectFiles'
 import { MultiOption, MultiSelect } from '@renderer/components/ui/multi-select'
 import { selectEntities, setEntity } from '@renderer/slices/registerSlice'
 import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover'

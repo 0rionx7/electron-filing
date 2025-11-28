@@ -7,7 +7,7 @@ import { AccountDetailsSchema, AccountDetailsType } from '@renderer/lib/schema'
 import { selectFirstStepData, setStep, updateFirstStepData } from '@renderer/slices/registerSlice'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/components/ui/card'
 import { Field } from '@renderer/components/ui/field'
-import InputField from '@renderer/components/InputField'
+import InputField from '@renderer/components/steppedForm/InputField'
 import { DevTool } from '@hookform/devtools'
 
 export const fieldLabelClass = `

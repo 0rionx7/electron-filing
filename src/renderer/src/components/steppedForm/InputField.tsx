@@ -1,7 +1,7 @@
 import { Controller, FieldValues, UseFormReturn, Path } from 'react-hook-form'
 
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
-import { fieldLabelClass } from '@renderer/components/AccountDetails'
+import { fieldLabelClass } from '@renderer/components/steppedForm/AccountDetails'
 import { Input } from '@renderer/components/ui/input'
 
 interface InputFieldProps<T extends FieldValues = FieldValues> {

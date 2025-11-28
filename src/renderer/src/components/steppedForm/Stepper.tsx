@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react'
 import { selectStep } from '@renderer/slices/registerSlice'
 import { useAppSelector } from '@renderer/app/hooks'
 import useGotoStep from '@renderer/hooks/useGotoStep'
-import StepAlert from '@renderer/components/StepAlert'
+import StepAlert from '@renderer/components/steppedForm/StepAlert'
 
 const StepContext = createContext<number>(1)
 const useStep = (): number => useContext(StepContext)

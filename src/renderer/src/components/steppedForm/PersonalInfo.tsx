@@ -19,10 +19,10 @@ import {
   SelectTrigger,
   SelectValue
 } from '@renderer/components/ui/select'
-import DatePicker from '@renderer/components/DatePicker'
+import DatePicker from '@renderer/components/steppedForm/DatePicker'
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
-import { fieldLabelClass } from '@renderer/components/AccountDetails'
-import InputField from '@renderer/components/InputField'
+import { fieldLabelClass } from '@renderer/components/steppedForm/AccountDetails'
+import InputField from '@renderer/components/steppedForm/InputField'
 
 const countries: Country[] = ['Greece', 'Cyprus', 'Italy', 'Spain']
 

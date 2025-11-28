@@ -9,7 +9,7 @@ import { Button } from '@renderer/components/ui/button'
 import { cn } from '@renderer/lib/utils'
 import { PersonalInfoType } from '@renderer/lib/schema'
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
-import { fieldLabelClass } from '@renderer/components/AccountDetails'
+import { fieldLabelClass } from '@renderer/components/steppedForm/AccountDetails'
 
 type DatePickerProps = {
   field: ControllerRenderProps<PersonalInfoType, 'dateOfBirth'>

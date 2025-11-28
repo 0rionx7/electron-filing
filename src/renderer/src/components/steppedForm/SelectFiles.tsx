@@ -11,7 +11,7 @@ import {
   selectRootDirectory,
   setStep
 } from '@renderer/slices/registerSlice'
-import FileItems from '@renderer/components/FileItems'
+import FileItems from '@renderer/components/steppedForm/FileItems'
 import { Field, FieldError, FieldLabel } from '@renderer/components/ui/field'
 
 export type FilesSelection = {

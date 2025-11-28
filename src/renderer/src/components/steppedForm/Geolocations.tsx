@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@renderer/
 import { useAppDispatch, useAppSelector } from '@renderer/app/hooks'
 import { Field, FieldError } from '@renderer/components/ui/field'
 import { Button } from '@renderer/components/ui/button'
-import GeolocationItems from '@renderer/components/GeolocationItems'
+import GeolocationItems from '@renderer/components/steppedForm/GeolocationItems'
 import { cities, countries, districts, regions, statesProvinces } from '@renderer/data'
 import { DevTool } from '@hookform/devtools'
 
